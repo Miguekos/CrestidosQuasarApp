@@ -12,30 +12,21 @@
       hide-bottom
       flat
     >
-      <template v-slot:top>
-        <q-toolbar>
-          <q-toolbar-title>
-            <q-input
-              borderless
-              dense
-              debounce="300"
-              v-model="filter"
-              placeholder="Buscar"
-            >
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </q-toolbar-title>
-        </q-toolbar>
-      </template>
-      <template v-slot:body-cell="props">
-        <q-td :props="props" @click.native="detallesDeCredito(props.row)">
-          <div>{{ props.value }}</div>
-          <div class="my-table-details">
-            {{ props.row.calories }}
-          </div>
-        </q-td>
+      <template v-slot:body="props">
+        <q-tr :props="props" @click.native="detallesDeCredito(props.row)">
+          <q-td key="name" :props="props">
+            {{ props.row.name }}
+            <!--            <div class="my-table-details">-->
+            <!--              {{ props.row.name }}-->
+            <!--            </div>-->
+          </q-td>
+          <q-td key="calories" :props="props">
+            {{ props.row.calories }} .S/
+          </q-td>
+          <q-td key="fat" :props="props">
+            {{ props.row.fat }}
+          </q-td>
+        </q-tr>
       </template>
     </q-table>
     <!-- <div class="q-mt-md">
@@ -87,7 +78,7 @@ export default {
           sortable: true
         },
         {
-          name: "PagoD",
+          name: "fat",
           align: "right",
           label: "Pago",
           field: "fat",

@@ -11,7 +11,8 @@ const routes = [
     path: '/clientes',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Clientes/Index.vue') }
+      { path: '', component: () => import('pages/Clientes/Index.vue') },
+      { path: 'detallecliente/:id', component: () => import('pages/Clientes/DetalleCliente.vue') }
     ]
   },
   {

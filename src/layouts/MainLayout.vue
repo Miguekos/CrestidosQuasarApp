@@ -38,6 +38,36 @@
               <q-icon name="search" />
             </template>
           </q-input>
+
+          <q-space></q-space>
+
+          <q-btn round icon="more_vert" flat color="white" size="sx">
+            <q-menu transition-show="scale" transition-hide="scale" fit>
+              <q-list style="min-width: 100px">
+                <q-item clickable>
+                  <q-item-section>Perfil</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>Contraseña</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable>
+                  <q-item-section>Notificaciones</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>Historial</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable>
+                  <q-item-section>Settings</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable>
+                  <q-item-section>Salir</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-toolbar>
       </q-header>
 
@@ -47,19 +77,22 @@
       <!--        </q-toolbar>-->
       <!--      </q-footer>-->
       <q-page-container>
-        <q-page style="padding-top: 20px; padding-bottom: 40px">
-          <router-view />
+        <q-page style="padding-top: 30px; padding-bottom: 40px">
+          <transition
+            appear
+            enter-active-class="animated fadeIn"
+            leave-active-class="animated fadeOut"
+          >
+            <!-- Wrapping only one DOM element, defined by QBtn -->
+            <router-view />
+          </transition>
 
-          <q-page-sticky position="bottom-right" :offset="[18, 18]">
-            <q-btn round color="positive" icon="add" class="rotate-0" />
+          <q-page-sticky position="bottom-right" :offset="[22, 22]">
+            <q-btn size="18px" round color="positive" icon="add" class="rotate-0" />
           </q-page-sticky>
 
-          <q-page-sticky
-            position="top"
-            expand
-            class="bg-secondary text-white"
-          >
-            <q-tabs dense v-model="tab">
+          <q-page-sticky position="top" expand class="bg-primary text-white">
+            <q-tabs v-model="tab">
               <q-tab
                 v-for="link in essentialLinks"
                 :key="link.title"
@@ -128,19 +161,25 @@ export default {
           link: "https://forum.quasar.dev",
           // icon: "settings",
           alert: "blue"
-        },
-        {
-          title: "",
-          caption: "forum.quasar.dev",
-          icon: "more_vert",
-          link: "https://forum.quasar.dev",
-          // icon: "settings",
-          alert: "blue"
         }
+        // {
+        //   title: "",
+        //   caption: "forum.quasar.dev",
+        //   icon: "more_vert",
+        //   link: "https://forum.quasar.dev",
+        //   icon: "settings",
+        //   alert: "blue"
+        // }
       ]
     };
   },
   methods: {
+    handleSwipe({ evt, ...info }) {
+      this.info = info;
+      this.$router.push("/pagos");
+      // native Javascript event
+      // console.log(evt)
+    },
     filter(val, update) {
       if (this.options === null) {
         // load data
@@ -190,6 +229,30 @@ export default {
         // console.log(arg);
         await this.$router.push(arg);
       }
+    },
+    swipePage(obj) {
+      let delta;
+      switch (obj.direction) {
+        case "right":
+          delta = -1;
+          break;
+        case "left":
+          delta = 1;
+          break;
+        default:
+          return;
+      }
+
+      if (Math.abs(obj.distance.x) < 0.5 * screen.width) {
+        // ignore if not a wide swipe!
+        return;
+      }
+
+      // get desired next page
+      // const goto = routeList.getNext(delta, this.$router.currentRoute);
+      // if (goto) {
+      //   this.$router.push(goto);
+      // }
     }
   },
   created() {
