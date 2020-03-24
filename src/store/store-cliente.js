@@ -12,7 +12,8 @@ const mutations = {
 const actions = {
   async callCliente({ commit }) {
     console.log("Todos los clientes");
-    const response = await axiosInstance.get(`/api/clientes`);
+    // const response = await axiosInstance.get(`/api/clientes`);
+    const response = await axiosInstance.get(`/clientes`);
     // console.log(response);
     console.log("Todos los clientes");
     commit("setClientes", response.data);

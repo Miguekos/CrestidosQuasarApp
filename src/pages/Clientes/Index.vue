@@ -24,14 +24,14 @@
       </template>
       <template v-slot:body="props">
         <q-tr :props="props" @click="detalleCliente(props.row)">
-          <q-td key="nombre" :props="props">
-            {{ props.row.nombre }}
+          <q-td key="name" :props="props">
+            {{ props.row.name }}
             <div class="my-table-details">
-              {{ props.row.fecha }}
+              {{ props.row.dni }}
             </div>
           </q-td>
           <q-td key="monto_a_apagar" :props="props">
-            {{ props.row.monto_a_apagar }} .S/
+            {{ props.row.monto }} .S/
           </q-td>
           <q-td key="deuda" class="text-red" :props="props">
             {{ props.row.deuda }} .S/
@@ -61,11 +61,11 @@ export default {
       },
       columns: [
         {
-          name: "nombre",
+          name: "name",
           required: true,
           label: "Clientes",
           align: "left",
-          field: "nombre",
+          field: "name",
           format: val => `${val}`,
           sortable: true
         },
