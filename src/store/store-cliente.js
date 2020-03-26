@@ -11,13 +11,22 @@ const mutations = {
 
 const actions = {
   async callCliente({ commit }) {
-    console.log("Todos los clientes");
+    console.log("callCliente");
     // const response = await axiosInstance.get(`/api/clientes`);
     const response = await axiosInstance.get(`/clientes`);
     // console.log(response);
-    console.log("Todos los clientes");
+    // console.log("Todos los clientes");
     commit("setClientes", response.data);
     // return response.data;
+  },
+  async addCliente({ commit }, payload) {
+    console.log("addCliente");
+    console.log(payload);
+    // const response = await axiosInstance.get(`/api/clientes`);
+    const response = await axiosInstance.post(`/cliente/add`, payload);
+    console.log(response);
+    // commit("setClientes", response.data);
+    return response.data;
   }
 };
 

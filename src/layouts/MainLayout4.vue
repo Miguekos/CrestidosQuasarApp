@@ -1,47 +1,73 @@
 <template>
   <div>
-<!--    <q-layout view="lHh Lpr lFf">-->
-    <q-layout view="lHh Lpr lFf" container style="height: 600px" class="shadow-2 rounded-borders">
-      <q-header>
-        <q-toolbar>
-          <q-toolbar-title>Header</q-toolbar-title>
-        </q-toolbar>
-      </q-header>
+    <q-layout view="lhh LpR lFf" class="shadow-2 rounded-borders">
+      <!--      <q-header reveal class="bg-black">-->
+      <!--        <q-toolbar>-->
+      <!--          Prestamo-->
+      <!--        </q-toolbar>-->
+      <!--      </q-header>-->
 
-      <q-page-container>
-        <q-page padding>
-          <router-view />
-        </q-page>
-      </q-page-container>
-
-      <!--      <q-page-container>-->
-      <!--        <router-view />-->
-      <!--      </q-page-container>-->
-      <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn round color="positive" icon="add" class="rotate-0" />
-      </q-page-sticky>
-<!--      <q-page-sticky position="top" expand class="bg-secondary text-white">-->
-      <q-page-sticky position="top">
-        <q-tabs dense v-model="tab">
+      <q-footer>
+        <q-tabs
+          dense
+          v-model="tab"
+          indicator-color="transparent"
+          active-color="white"
+          class="bg-primary text-grey-6 shadow-2"
+        >
           <q-tab
             v-for="link in essentialLinks"
             :key="link.title"
             @click="URL(link.link)"
             :name="link.title"
             :label="link.title"
+            :icon="link.icon"
           />
+          <!--          <q-tab name="movies" icon="movie" label="Movies" />-->
         </q-tabs>
-      </q-page-sticky>
+      </q-footer>
+
+      <q-page-container>
+        <q-page style="padding-top: 60px; padding-bottom: 50px" class="q-pa-md">
+          <transition appear>
+            <!-- Wrapping only one DOM element, defined by QBtn -->
+            <router-view />
+          </transition>
+
+          <q-page-sticky position="bottom-right" :offset="[18, 18]">
+            <q-btn
+              @click="registro()"
+              round
+              color="positive"
+              icon="add"
+              class="rotate-0"
+            />
+          </q-page-sticky>
+
+          <q-page-sticky position="top" expand class="bg-primary text-white">
+            <q-toolbar>
+              <q-btn flat round dense icon="map" />
+              <q-toolbar-title>Clientes</q-toolbar-title>
+            </q-toolbar>
+          </q-page-sticky>
+        </q-page>
+
+        <q-page-scroller position="bottom">
+          <q-btn fab icon="keyboard_arrow_up" color="red" />
+        </q-page-scroller>
+      </q-page-container>
     </q-layout>
+    <q-dialog persistent v-model="dialogRegistro">
+      <Registro @cerrarDialog="dialogRegistro = false" />
+    </q-dialog>
   </div>
 </template>
-
 <script>
 export default {
   data() {
     return {
       tab: "mails",
-      leftDrawerOpen: false,
+      dialogRegistro: false,
       essentialLinks: [
         {
           title: "Clientes",
@@ -60,7 +86,7 @@ export default {
         {
           title: "Control",
           caption: "chat.quasar.dev",
-          icon: "chat",
+          // icon: "chat",
           link: "https://chat.quasar.dev",
           icon: "description",
           alert: "green"
@@ -68,11 +94,19 @@ export default {
         {
           title: "Config",
           caption: "forum.quasar.dev",
-          icon: "record_voice_over",
+          // icon: "record_voice_over",
           link: "https://forum.quasar.dev",
           icon: "settings",
           alert: "blue"
         }
+        // {
+        //   title: "",
+        //   caption: "forum.quasar.dev",
+        //   icon: "more_vert",
+        //   link: "https://forum.quasar.dev",
+        //   icon: "settings",
+        //   alert: "blue"
+        // }
       ]
     };
   },
@@ -93,9 +127,12 @@ export default {
         await this.$router.push(arg);
       }
     },
-    boton() {
-      console.log("Se preciono el boton");
+    registro() {
+      this.dialogRegistro = true;
     }
+  },
+  components: {
+    Registro: () => import("../components/dielogRegistro")
   }
 };
 </script>

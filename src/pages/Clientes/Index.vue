@@ -26,14 +26,14 @@
         <q-tr :props="props" @click="detalleCliente(props.row)">
           <q-td key="name" :props="props">
             {{ props.row.name }}
-            <div class="my-table-details">
+            <label class="my-table-details">
               {{ props.row.dni }}
-            </div>
+            </label>
           </q-td>
-          <q-td key="monto_a_apagar" :props="props">
-            {{ props.row.monto }} .S/
+          <q-td key="telefono" :props="props">
+            {{ props.row.telefono }}
           </q-td>
-          <q-td key="deuda" class="text-red" :props="props">
+          <q-td key="deuda" cefonoss="text-red" :props="props">
             {{ props.row.deuda }} .S/
           </q-td>
         </q-tr>
@@ -53,7 +53,7 @@ export default {
       loading: false,
       info: null,
       pagination: {
-        sortBy: "desc",
+        sortBy: "asc",
         descending: false,
         page: 1,
         rowsPerPage: 0
@@ -70,11 +70,10 @@ export default {
           sortable: true
         },
         {
-          name: "monto_a_apagar",
+          name: "telefono",
           align: "right",
-          label: "Prestado",
-          format: val => `${val} ./S`,
-          field: "monto_a_apagar",
+          label: "Telefono",
+          field: "telefono",
           sortable: true
         },
         {
@@ -117,11 +116,11 @@ export default {
 
 <style>
 .my-table-details {
-  font-size: 0.85em;
-  font-style: italic;
-  max-width: 200px;
-  white-space: normal;
-  color: #2b33d3;
-  margin-top: 4px;
+  font-size: 10px;
+  font-style: normal;
+  max-width: 322px;
+  white-space: pre-line;
+  color: #93939a;
+  margin-top: 5px;
 }
 </style>

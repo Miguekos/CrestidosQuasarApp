@@ -1,0 +1,123 @@
+<template>
+  <!--  <div class="q-pa-md" style="max-width: 400px">-->
+  <div>
+    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-xs">
+      <q-input
+        dense
+        filled
+        autofocus
+        v-model="name"
+        label="Nombre *"
+        lazy-rules
+        :rules="[
+          val => (val && val.length > 0) || 'Por favor escribe el Nombre'
+        ]"
+      />
+
+      <q-input
+        dense
+        filled
+        type="number"
+        v-model="dni"
+        label="DNI/CE *"
+        lazy-rules
+        :rules="[val => (val && val.length > 0) || 'Por favor escribe el DNI']"
+      />
+
+      <q-input
+        dense
+        filled
+        type="number"
+        v-model="telefono"
+        label="Telefono *"
+        lazy-rules
+        :rules="[
+          val => (val && val.length > 0) || 'Por favor escribe el Telefono'
+        ]"
+      />
+
+      <q-separator />
+
+      <div class="row" align="right">
+        <div class="col-6 q-pa-xs">
+          <q-btn
+            class="full-width"
+            outline
+            label="Salir"
+            color="negative"
+            type="reset"
+            @click="cerrar()"
+          />
+        </div>
+        <div class="col-6 q-pa-xs">
+          <q-btn
+            class="full-width"
+            outline
+            label="Agregar"
+            color="positive"
+            type="submit"
+          />
+        </div>
+      </div>
+    </q-form>
+  </div>
+</template>
+
+<script>
+import { mapActions } from "vuex";
+export default {
+  data() {
+    return {
+      name: null,
+      dni: null,
+      telefono: null
+    };
+  },
+  methods: {
+    ...mapActions("client", ["addCliente", "callCliente"]),
+    cerrar() {
+      console.log("Se preciono Cerrar");
+    },
+    onSubmit() {
+      this.addCliente({
+        name: this.name,
+        dni: this.dni,
+        telefono: this.telefono,
+        monto: 1000
+      })
+        .then(resp => {
+          if (resp.codRes == "02") {
+            this.$q.notify({
+              color: "blue-4",
+              textColor: "white",
+              icon: "cloud_done",
+              message: `DNI ya resgistrado ${resp.message}`
+            });
+          } else {
+            this.$q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              message: `${resp}`
+            });
+            this.callCliente();
+            this.$emit("cerrarDialogo");
+          }
+        })
+        .catch(err => {
+          this.$q.notify({
+            color: "red-4",
+            textColor: "white",
+            icon: "cloud_done",
+            message: `${err.data}`
+          });
+        });
+    },
+    onReset() {
+      this.name = null;
+      this.age = null;
+      this.accept = false;
+    }
+  }
+};
+</script>

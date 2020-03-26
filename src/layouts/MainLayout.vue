@@ -88,7 +88,13 @@
           </transition>
 
           <q-page-sticky position="bottom-right" :offset="[22, 22]">
-            <q-btn size="18px" round color="positive" icon="add" class="rotate-0" />
+            <q-btn
+              size="18px"
+              round
+              color="positive"
+              icon="add"
+              class="rotate-0"
+            />
           </q-page-sticky>
 
           <q-page-sticky position="top" expand class="bg-primary text-white">
@@ -136,14 +142,14 @@ export default {
           title: "Clientes",
           caption: "quasar.dev",
           link: "/clientes",
-          // icon: "group",
+          icon: "group",
           alert: "red"
         },
         {
           title: "Pagos",
           caption: "github.com/quasarframework",
           link: "/pagos",
-          // icon: "attach_money",
+          icon: "attach_money",
           alert: "yellow"
         },
         {
@@ -151,7 +157,7 @@ export default {
           caption: "chat.quasar.dev",
           // icon: "chat",
           link: "https://chat.quasar.dev",
-          // icon: "description",
+          icon: "description",
           alert: "green"
         },
         {
@@ -159,7 +165,7 @@ export default {
           caption: "forum.quasar.dev",
           // icon: "record_voice_over",
           link: "https://forum.quasar.dev",
-          // icon: "settings",
+          icon: "settings",
           alert: "blue"
         }
         // {
