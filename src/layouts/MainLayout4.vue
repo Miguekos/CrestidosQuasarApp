@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div class="my-font">
     <q-layout view="lhh LpR lFf" class="shadow-2 rounded-borders">
       <!--      <q-header reveal class="bg-black">-->
       <!--        <q-toolbar>-->
       <!--          Prestamo-->
       <!--        </q-toolbar>-->
       <!--      </q-header>-->
-
       <q-footer>
         <q-tabs
           dense
@@ -28,14 +27,15 @@
       </q-footer>
 
       <q-page-container>
-        <q-page style="padding-top: 60px; padding-bottom: 50px" class="q-pa-md">
-          <transition appear>
+        <q-page style="padding-top: 60px; padding-bottom: 70px" class="q-pa-md">
+          <transition appear transition-show="rotate" transition-hide="rotate">
             <!-- Wrapping only one DOM element, defined by QBtn -->
             <router-view />
           </transition>
 
           <q-page-sticky position="bottom-right" :offset="[18, 18]">
             <q-btn
+              size="16px"
               @click="registro()"
               round
               color="positive"
@@ -46,7 +46,9 @@
 
           <q-page-sticky position="top" expand class="bg-primary text-white">
             <q-toolbar>
-              <q-btn flat round dense icon="map" />
+              <q-btn @click="IrAtras()" flat round dense icon="arrow_back" />
+              <!--              <div>IMEI {{ asd }}</div>-->
+              <!--              <div>IMEI {{ IMEI }}</div>-->
               <q-toolbar-title>Clientes</q-toolbar-title>
             </q-toolbar>
           </q-page-sticky>
@@ -66,6 +68,8 @@
 export default {
   data() {
     return {
+      IMEI: "",
+      // asd: window.device.platform,
       tab: "mails",
       dialogRegistro: false,
       essentialLinks: [
@@ -111,6 +115,43 @@ export default {
     };
   },
   methods: {
+    onDeviceReady() {
+      // navigator.notification.alert(
+      //   "You are the winner Now!", // message
+      //   // alertDismissed, // callback
+      //   "Game Over now", // title
+      //   "Done" // buttonName
+      // );
+      // navigator.notification.confirm(
+      //   "You are the winner Now!", // message
+      //   // alertDismissed, // callback
+      //   "Game Over now", // title
+      //   "Done" // buttonName
+      // );
+      // navigator.notification.prompt(
+      //   "You are the winner Now!", // message
+      //   // alertDismissed, // callback
+      //   "Game Over now", // title
+      //   "Done" // buttonName
+      // );
+      // navigator.notification.beep(1);
+      // StatusBar.overlaysWebView(true);
+      // StatusBar.backgroundColorByHexString("#33000000");
+      // StatusBar.backgroundColorByName("red");
+      // StatusBar.backgroundColorByHexString("#C0C0C0");
+      // StatusBar.hide();
+      // StatusBar.show();
+      // StatusBar.styleLightContent();
+      // console.log(StatusBar);
+      // console.log(navigator.notification);
+      // alert(navigator.notification);
+      // this.IMEI = StatusBar;
+      // this.IMEI = device;
+    },
+    IrAtras() {
+      console.log("Ir Atras");
+      this.$router.go(-1);
+    },
     async URL(arg) {
       console.log("Ir a:", arg);
       if (arg == "logout") {
@@ -133,6 +174,12 @@ export default {
   },
   components: {
     Registro: () => import("../components/dielogRegistro")
+  },
+  created() {
+    // we register the event like on plugin's doc page
+    window.addEventListener("deviceready", this.onDeviceReady(), false);
+    // StatusBar.backgroundColorByHexString("#333");
+    // StatusBar.backgroundColorByName("red");
   }
 };
 </script>

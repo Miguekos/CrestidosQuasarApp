@@ -3,11 +3,12 @@
     <q-table
       :data="getClientes"
       :columns="columns"
-      row-key="details"
+      row-key="created_at.$date"
       flat
       hide-bottom
       :pagination.sync="pagination"
       :loading="loading"
+      binary-state-sort
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -33,8 +34,8 @@
           <q-td key="telefono" :props="props">
             {{ props.row.telefono }}
           </q-td>
-          <q-td key="deuda" cefonoss="text-red" :props="props">
-            {{ props.row.deuda }} .S/
+          <q-td key="created_at.$date" cefonoss="text-red" :props="props">
+            {{ formatFecha(props.row.created_at.$date) }}
           </q-td>
         </q-tr>
       </template>
@@ -44,6 +45,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { date } from "quasar";
 export default {
   computed: {
     ...mapGetters("client", ["getClientes"])
@@ -53,8 +55,9 @@ export default {
       loading: false,
       info: null,
       pagination: {
-        sortBy: "asc",
-        descending: false,
+        // sortBy: "asc",
+        sortBy: "desc",
+        descending: true,
         page: 1,
         rowsPerPage: 0
         // rowsNumber: xx if getting data from a server
@@ -62,25 +65,23 @@ export default {
       columns: [
         {
           name: "name",
-          required: true,
           label: "Clientes",
           align: "left",
           field: "name",
-          format: val => `${val}`,
-          sortable: true
+          format: val => `${val}`
         },
         {
           name: "telefono",
           align: "right",
           label: "Telefono",
-          field: "telefono",
-          sortable: true
+          field: "telefono"
         },
         {
-          name: "deuda",
+          name: "created_at.$date",
           align: "right",
-          label: "Deuda",
-          field: "deuda",
+          label: "Fecha",
+          field: "created_at.$date",
+          required: true,
           sortable: true
         }
       ]
@@ -88,6 +89,9 @@ export default {
   },
   methods: {
     ...mapActions("client", ["callCliente"]),
+    formatFecha(arg) {
+      return date.formatDate(arg, "DD-MM-YYYY");
+    },
     detalleCliente(arg) {
       this.$router.push("/clientes/detallecliente/1");
       // this.$q.dialog({});
@@ -109,7 +113,7 @@ export default {
     this.loading = false;
   },
   created() {
-    this.$q.addressbarColor.set("#0056a1");
+    // this.$q.addressbarColor.set("#0056a1");
   }
 };
 </script>

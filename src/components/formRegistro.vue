@@ -17,17 +17,22 @@
       <q-input
         dense
         filled
+        maxlength="9"
         type="number"
         v-model="dni"
         label="DNI/CE *"
         lazy-rules
-        :rules="[val => (val && val.length > 0) || 'Por favor escribe el DNI']"
+        counter
+        :rules="[val => (val && val.length > 0 && val.length < 9) || 'Por favor escribe el DNI']"
       />
 
       <q-input
         dense
         filled
-        type="number"
+        maxlength="9"
+        pattern="\d*"
+        type="text"
+        counter
         v-model="telefono"
         label="Telefono *"
         lazy-rules
@@ -46,7 +51,7 @@
             label="Salir"
             color="negative"
             type="reset"
-            @click="cerrar()"
+            v-close-popup
           />
         </div>
         <div class="col-6 q-pa-xs">
