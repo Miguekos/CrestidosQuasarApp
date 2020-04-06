@@ -93,9 +93,10 @@ export default {
       return date.formatDate(arg, "DD-MM-YYYY");
     },
     detalleCliente(arg) {
-      this.$router.push("/clientes/detallecliente/1");
+      console.log("DetallesDelClienteSeleccionado");
+      console.log(arg._id.$oid);
+      this.$router.push(`/clientes/detallecliente/${arg._id.$oid}`);
       // this.$q.dialog({});
-      console.log(arg);
     },
     detallesDeCredito(arg) {
       console.log(arg);

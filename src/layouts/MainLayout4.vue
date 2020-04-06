@@ -28,9 +28,18 @@
 
       <q-page-container>
         <q-page style="padding-top: 60px; padding-bottom: 70px" class="q-pa-md">
-          <transition appear transition-show="rotate" transition-hide="rotate">
-            <!-- Wrapping only one DOM element, defined by QBtn -->
-            <router-view />
+          <!--          <transition appear transition-show="rotate" transition-hide="rotate">-->
+          <!--            &lt;!&ndash; Wrapping only one DOM element, defined by QBtn &ndash;&gt;-->
+          <!--            <router-view />-->
+          <!--          </transition>-->
+
+          <transition
+            name="transitions"
+            enter-active-class="animated fadeIn"
+            leave-active-class="animated fadeOut"
+            mode="out-in"
+          >
+            <router-view></router-view>
           </transition>
 
           <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -47,6 +56,7 @@
           <q-page-sticky position="top" expand class="bg-primary text-white">
             <q-toolbar>
               <q-btn @click="IrAtras()" flat round dense icon="arrow_back" />
+              <!--              <q-btn v-else flat round dense icon="map" />-->
               <!--              <div>IMEI {{ asd }}</div>-->
               <!--              <div>IMEI {{ IMEI }}</div>-->
               <q-toolbar-title>Clientes</q-toolbar-title>
@@ -68,6 +78,7 @@
 export default {
   data() {
     return {
+      stopAtras: false,
       IMEI: "",
       // asd: window.device.platform,
       tab: "mails",
@@ -154,6 +165,11 @@ export default {
     },
     async URL(arg) {
       console.log("Ir a:", arg);
+      if (arg == "/clientes") {
+        this.stopAtras = false;
+      } else {
+        this.stopAtras = true;
+      }
       if (arg == "logout") {
         console.log("Entro en el deslogueo");
         this.logout();
@@ -176,10 +192,17 @@ export default {
     Registro: () => import("../components/dielogRegistro")
   },
   created() {
+    this.$q.addressbarColor.set("#0056a1");
+    this.stopAtras = false;
+    console.log("this.$route.path");
+    console.log(this.$route.path);
     // we register the event like on plugin's doc page
     window.addEventListener("deviceready", this.onDeviceReady(), false);
     // StatusBar.backgroundColorByHexString("#333");
     // StatusBar.backgroundColorByName("red");
+  },
+  mounted() {
+    console.log("Simew se ejecuta");
   }
 };
 </script>

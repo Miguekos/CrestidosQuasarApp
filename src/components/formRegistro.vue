@@ -23,15 +23,18 @@
         label="DNI/CE *"
         lazy-rules
         counter
-        :rules="[val => (val && val.length > 0 && val.length < 9) || 'Por favor escribe el DNI']"
+        :rules="[
+          val =>
+            (val && val.length > 0 && val.length < 10) ||
+            'Por favor escribe el DNI'
+        ]"
       />
 
       <q-input
         dense
         filled
         maxlength="9"
-        pattern="\d*"
-        type="text"
+        type="number"
         counter
         v-model="telefono"
         label="Telefono *"
@@ -87,8 +90,7 @@ export default {
       this.addCliente({
         name: this.name,
         dni: this.dni,
-        telefono: this.telefono,
-        monto: 1000
+        telefono: this.telefono
       })
         .then(resp => {
           if (resp.codRes == "02") {
@@ -100,10 +102,11 @@ export default {
             });
           } else {
             this.$q.notify({
-              color: "green-4",
+              color: "green",
               textColor: "white",
               icon: "cloud_done",
-              message: `${resp}`
+              position: "top-right",
+              message: `Cliente ID: ${resp}`
             });
             this.callCliente();
             this.$emit("cerrarDialogo");

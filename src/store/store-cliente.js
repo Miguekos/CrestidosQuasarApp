@@ -1,11 +1,15 @@
 import { axiosInstance } from "boot/axios";
 const state = {
-  Clientes: []
+  Clientes: [],
+  ClienteOne: ""
 };
 
 const mutations = {
   setClientes(state, payload) {
     state.Clientes = payload;
+  },
+  setClienteOne(state, payload) {
+    state.ClienteOne = payload;
   }
 };
 
@@ -17,6 +21,15 @@ const actions = {
     // console.log(response);
     // console.log("Todos los clientes");
     commit("setClientes", response.data);
+    // return response.data;
+  },
+  async callClienteOne({ commit }, payload) {
+    console.log("callClienteOne");
+    // const response = await axiosInstance.get(`/api/clientes`);
+    const response = await axiosInstance.get(`/cliente/${payload}`);
+    // console.log(response);
+    // console.log("Todos los clientes");
+    commit("setClienteOne", response.data);
     // return response.data;
   },
   async addCliente({ commit }, payload) {
@@ -34,6 +47,10 @@ const getters = {
   getClientes(state) {
     console.log(state.Clientes);
     return state.Clientes;
+  },
+  getClienteOne(state) {
+    console.log(state.ClienteOne);
+    return state.ClienteOne;
   }
 };
 
