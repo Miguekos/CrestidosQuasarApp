@@ -70,7 +70,8 @@ export default {
       })
         .then(resp => {
           this.$q.notify({
-            color: "green-4",
+            color: "green",
+            position: "top-right",
             textColor: "white",
             icon: "cloud_done",
             message: `${resp}`
@@ -81,6 +82,7 @@ export default {
         .catch(err => {
           this.$q.notify({
             color: "red-4",
+            position: "top-right",
             textColor: "white",
             icon: "cloud_done",
             message: `${err.data}`

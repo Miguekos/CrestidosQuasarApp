@@ -1,6 +1,7 @@
 <template>
   <div v-touch-swipe.mouse.left="handleSwipe" class="">
     <q-table
+      grid-header
       :data="getClientes"
       :columns="columns"
       row-key="created_at.$date"
@@ -8,8 +9,23 @@
       hide-bottom
       :pagination.sync="pagination"
       :loading="loading"
+      :filter="filter"
       binary-state-sort
     >
+      <template v-slot:top>
+        <q-input
+          class="full-width"
+          outlined
+          dense
+          debounce="300"
+          v-model="filter"
+          placeholder="Buscar"
+        >
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th
@@ -40,6 +56,14 @@
         </q-tr>
       </template>
     </q-table>
+    <!--    <q-page style="padding-top: 160px; padding-bottom: 70px" class="q-pa-md">-->
+    <!--      <q-page-sticky position="top" expand class="bg-accent text-white">-->
+    <!--        <q-toolbar>-->
+    <!--          <q-btn flat round dense icon="map" />-->
+    <!--          <q-toolbar-title>Title</q-toolbar-title>-->
+    <!--        </q-toolbar>-->
+    <!--      </q-page-sticky>-->
+    <!--    </q-page>-->
   </div>
 </template>
 
@@ -52,12 +76,13 @@ export default {
   },
   data() {
     return {
+      filter: "",
       loading: false,
       info: null,
       pagination: {
         // sortBy: "asc",
-        sortBy: "desc",
-        descending: true,
+        sortBy: "created_at.$date",
+        descending: false,
         page: 1,
         rowsPerPage: 0
         // rowsNumber: xx if getting data from a server
@@ -114,7 +139,17 @@ export default {
     this.loading = false;
   },
   created() {
-    // this.$q.addressbarColor.set("#0056a1");
+    console.log("created - Cliente");
+    this.$q.loading.show({
+      spinnerColor: "blue",
+      spinnerSize: 100,
+      backgroundColor: "grey",
+      message: "Loading..",
+      messageColor: "black"
+    });
+    this.$store.commit("general/setAtras", "map");
+    this.$q.addressbarColor.set("#0056a1");
+    this.$q.loading.hide();
   }
 };
 </script>

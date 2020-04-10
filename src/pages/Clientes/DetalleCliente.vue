@@ -30,75 +30,13 @@
       </q-item>
     </q-card>
     <q-separator />
-    <!--    <q-card class="shadow-8">-->
-    <!--      <q-expansion-item-->
-    <!--        class="itemexp"-->
-    <!--        header-class="text-red"-->
-    <!--        expand-icon-class="text-red"-->
-    <!--        v-model="expandedActivos"-->
-    <!--        icon="attach_money"-->
-    <!--        label="Creditos Activos"-->
-    <!--        caption="Detalle"-->
-    <!--      >-->
-    <!--        <q-separator />-->
-    <!--        <q-card class="bg-red-1">-->
-    <!--          <q-card-section>-->
-    <!--            <q-list>-->
-    <!--              <q-slide-item-->
-    <!--                class="bg-red-1"-->
-    <!--                v-for="link in essentialLinks"-->
-    <!--                :key="link.deuda"-->
-    <!--                @left="onLeft"-->
-    <!--                @right="onRight"-->
-    <!--                left-color="green"-->
-    <!--                right-color="purple"-->
-    <!--              >-->
-    <!--                <template v-slot:left>-->
-    <!--                  <div class="row items-center">-->
-    <!--                    <q-icon left name="done" /> Realziar Abono..-->
-    <!--                  </div>-->
-    <!--                </template>-->
-    <!--                <template v-slot:right>-->
-    <!--                  <div class="row items-center">-->
-    <!--                    Detalle de Pagos.. <q-icon right name="alarm" />-->
-    <!--                  </div>-->
-    <!--                </template>-->
-
-    <!--                <q-item>-->
-    <!--                  &lt;!&ndash;                    <q-item-section avatar>&ndash;&gt;-->
-    <!--                  &lt;!&ndash;                      <q-icon color="primary" name="attach_money" />&ndash;&gt;-->
-    <!--                  &lt;!&ndash;                    </q-item-section>&ndash;&gt;-->
-    <!--                  <q-item-section>-->
-    <!--                    <q-item-label-->
-    <!--                      >Deuda:-->
-    <!--                      <strong style="color: #bf360c"-->
-    <!--                        ><u>{{ link.deuda }} ./S</u></strong-->
-    <!--                      ></q-item-label-->
-    <!--                    >-->
-    <!--                    <q-item-label caption-->
-    <!--                      >Ultimo pago-->
-    <!--                      <span style="color: #0d47a1">{{ link.fecha }}</span>-->
-    <!--                      por-->
-    <!--                      <b style="color: #b71c1c"-->
-    <!--                        >{{ link.pago }}./S</b-->
-    <!--                      ></q-item-label-->
-    <!--                    >-->
-    <!--                  </q-item-section>-->
-    <!--                </q-item>-->
-    <!--                <q-separator />-->
-    <!--              </q-slide-item>-->
-    <!--            </q-list>-->
-    <!--          </q-card-section>-->
-    <!--        </q-card>-->
-    <!--      </q-expansion-item>-->
-    <!--      &lt;!&ndash;        </div>&ndash;&gt;-->
-    <!--    </q-card>-->
-    <!--    {{ essentialLinksPagados }}-->
-    <!--    {{ getCredits }}-->
-    <!--    {{ getCreditsCrono }}-->
+    <!--    {{ getCreditsCrono.length }}-->
     <q-card v-for="link in getCredits" :key="link.idCliente" class="shadow-8">
       <q-expansion-item
-        header-class="text-green"
+        :header-class="{
+          'text-green': link.estado,
+          'text-red': link.estado == false
+        }"
         group="somegroup"
         @click="getDetalleCrono(link._id)"
         icon="attach_money"
@@ -113,6 +51,22 @@
                 <q-item-section>
                   <q-item-label>
                     <div class="q-pa-xs">
+                      <div
+                        v-if="getCreditsCrono.cuotasPorPagar > 0"
+                        class="q-mt-lg"
+                      >
+                        <q-item-label class="text-center" caption>
+                          Selecciona cantidad de cuotas
+                        </q-item-label>
+                        <q-slider
+                          name="Cuotas"
+                          v-model="cuotas"
+                          label-always
+                          :min="1"
+                          :max="getCreditsCrono.cuotasPorPagar"
+                          :step="1"
+                        />
+                      </div>
                       <q-table
                         flat
                         dense
@@ -138,35 +92,56 @@
                             </q-td>
                           </q-tr>
                         </template>
+                        <template v-slot:bottom="props">
+                          <div class="q-pa-md">
+                            <q-btn
+                              size="12px"
+                              dense
+                              icon="chevron_left"
+                              color="primary"
+                              class="q-mr-lg"
+                              :disable="props.isFirstPage"
+                              @click="props.prevPage"
+                            />
+                            <q-btn
+                              size="12px"
+                              dense
+                              icon="chevron_right"
+                              color="primary"
+                              class="q-ml-lg"
+                              :disable="props.isLastPage"
+                              @click="props.nextPage"
+                            />
+                          </div>
+                        </template>
                       </q-table>
                       <!--                      <q-form @submit="onSubmit" class="q-gutter-xs">-->
-                      <div
+
+                      <q-card
                         v-if="getCreditsCrono.cuotasPorPagar == 0"
-                        class="text-center text-red text-h4"
+                        flat
+                        bordered
+                        class="bg-grey-2"
                       >
-                        Credito Cancelado
-                      </div>
-                      <div
-                        v-if="getCreditsCrono.cuotasPorPagar > 0"
-                        class="q-mt-lg"
-                      >
-                        <q-item-label class="text-center" caption>
-                          Selecciona cantidad de cuotas
-                        </q-item-label>
-                        <q-slider
-                          name="Cuotas"
-                          v-model="cuotas"
-                          label-always
-                          :min="1"
-                          :max="getCreditsCrono.cuotasPorPagar"
-                          :step="1"
-                        />
-                      </div>
+                        <q-card-section>
+                          <div class="text-center text-red text-h5">
+                            Credito Cancelado
+                          </div>
+                        </q-card-section>
+                        <q-separator />
+                        <!--                        <q-card-section class="row q-gutter-sm items-center">-->
+                        <!--                          <div-->
+                        <!--                            class="q-px-sm q-py-xs bg-grey-8 text-white rounded-borders text-center text-no-wrap"-->
+                        <!--                          >-->
+                        <!--                            asdasd-->
+                        <!--                          </div>-->
+                        <!--                        </q-card-section>-->
+                      </q-card>
 
                       <div>
                         <q-btn
                           v-if="getCreditsCrono.cuotasPorPagar > 0"
-                          size="md"
+                          size="20px"
                           outline
                           class="full-width"
                           @click="onSubmit(link)"
@@ -177,7 +152,10 @@
                       <!--                      </q-form>-->
                     </div>
                   </q-item-label>
-                  <q-item-label>
+                  <q-item-label v-if="getCreditsCrono.length == 0">
+                    <!--                    <TablaDetalle :info="getCreditsCrono" />-->
+                  </q-item-label>
+                  <q-item-label v-else>
                     <TablaDetalle :info="getCreditsCrono" />
                   </q-item-label>
                   <!--                    <q-item-label caption-->
@@ -255,56 +233,6 @@ export default {
           field: "montoAbonado",
           format: val => `${val} ./S`
         }
-      ],
-      essentialLinks: [
-        {
-          deuda: "1200",
-          fecha: "Lunes 23/03/2020",
-          pago: "50",
-          icon: "group",
-          alert: "red"
-        },
-        {
-          deuda: "200",
-          fecha: "Lunes 23/03/2020",
-          pago: "20",
-          icon: "attach_money",
-          alert: "yellow"
-        },
-        {
-          deuda: "1400",
-          fecha: "Lunes 23/03/2020",
-          // icon: "chat",
-          pago: "80",
-          icon: "description",
-          alert: "green"
-        },
-        {
-          deuda: "350",
-          fecha: "Lunes 23/03/2020",
-          // icon: "record_voice_over",
-          pago: "20",
-          icon: "settings",
-          alert: "blue"
-        }
-        // {
-        //   title: "",
-        //   caption: "forum.quasar.dev",
-        //   icon: "more_vert",
-        //   link: "https://forum.quasar.dev",
-        //   icon: "settings",
-        //   alert: "blue"
-        // }
-      ],
-      essentialLinksPagados: [
-        // {
-        //   deuda: "0",
-        //   fecha: "Lunes 23/03/2020",
-        //   pago: "50",
-        //   icon: "group",
-        //   alert: "red",
-        //   monto: 1200
-        // }
       ]
     };
   },
@@ -372,16 +300,35 @@ export default {
     TablaDetalle: () => import("./tablaDetalle")
   },
   async mounted() {
-    console.log("Created");
-    await this.callClienteOne(this.$route.params.id);
-    console.log(this.$route.params);
+    this.$q.loading.show({
+      spinnerColor: "blue",
+      spinnerSize: 100,
+      backgroundColor: "grey",
+      message: "Loading..",
+      messageColor: "black"
+    });
     this.clienteid = this.$route.params;
+    await this.callClienteOne(this.$route.params.id);
     await this.callCredit(this.$route.params);
+    console.log(this.$route.params);
+    console.log("Created");
+    // if (this.getCredits[0]) {
+    //   console.log("si tiene");
+    //   console.log(this.getCredits[0]._id);
+    //   await this.getDetalleCrono(this.getCredits[0]._id);
+    // } else {
+    //   console.log("no tiene");
+    // }
+    // console.log("Created");
+    this.$q.loading.hide();
   }
 };
 </script>
 <style>
 .q-item {
   min-height: 70px;
+}
+.q-table__bottom {
+  align-self: center;
 }
 </style>

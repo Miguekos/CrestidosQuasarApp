@@ -5,6 +5,7 @@ import Vuex from "vuex";
 import client from "./store-cliente";
 import credit from "./store-creditos";
 import pagos from "./store-pagos";
+import general from "./store-general";
 
 Vue.use(Vuex);
 
@@ -23,7 +24,8 @@ export default function(/* { ssrContext } */) {
       // example
       client,
       credit,
-      pagos
+      pagos,
+      general
     },
 
     // enable strict mode (adds overhead!)

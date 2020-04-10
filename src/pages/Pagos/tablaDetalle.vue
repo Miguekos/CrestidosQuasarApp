@@ -33,16 +33,18 @@
           <td class="text-right">{{ info.totalCuotasPagadas }}</td>
         </tr>
         <tr>
-          <td class="text-left">Proximo Pago:</td>
-          <td class="text-right">{{ info.proximadiadepago[0] }}</td>
-        </tr>
-        <tr>
           <td class="text-left">Cuotas Vencidas:</td>
-          <td v-if="info.DiasMora > 0" class="text-red text-right"><strong>{{ info.DiasMora }}</strong></td>
+          <td v-if="info.DiasMora > 0" class="text-red text-right">
+            <strong>{{ info.DiasMora }}</strong>
+          </td>
           <td v-else class="text-right">0</td>
         </tr>
       </tbody>
     </q-markup-table>
+    <div class="text-caption text-center text-grey">
+      Tu proxima fecha de pago es:
+      <strong class="text-red">{{ info.proximadiadepago[0] }}</strong>
+    </div>
   </div>
 </template>
 <script>

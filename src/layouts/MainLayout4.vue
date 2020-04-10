@@ -1,11 +1,15 @@
 <template>
   <div class="my-font">
     <q-layout view="lhh LpR lFf" class="shadow-2 rounded-borders">
-      <!--      <q-header reveal class="bg-black">-->
-      <!--        <q-toolbar>-->
-      <!--          Prestamo-->
-      <!--        </q-toolbar>-->
-      <!--      </q-header>-->
+      <q-header reveal class="bg-primary">
+        <q-toolbar>
+          <q-btn @click="IrAtras(getAtras)" flat round dense :icon="getAtras" />
+          <!--              <q-btn v-else flat round dense icon="map" />-->
+          <!--              <div>IMEI {{ asd }}</div>-->
+          <!--              <div>IMEI {{ IMEI }}</div>-->
+          <q-toolbar-title>Prestamos</q-toolbar-title>
+        </q-toolbar>
+      </q-header>
       <q-footer>
         <q-tabs
           dense
@@ -23,11 +27,12 @@
             :icon="link.icon"
           />
           <!--          <q-tab name="movies" icon="movie" label="Movies" />-->
-        </q-tabs>
+        </q-tabs
+          dense>
       </q-footer>
 
       <q-page-container>
-        <q-page style="padding-top: 60px; padding-bottom: 70px" class="q-pa-md">
+        <q-page style="padding-top: 0px; padding-bottom: 70px" class="q-pa-md">
           <!--          <transition appear transition-show="rotate" transition-hide="rotate">-->
           <!--            &lt;!&ndash; Wrapping only one DOM element, defined by QBtn &ndash;&gt;-->
           <!--            <router-view />-->
@@ -53,19 +58,25 @@
             />
           </q-page-sticky>
 
-          <q-page-sticky position="top" expand class="bg-primary text-white">
-            <q-toolbar>
-              <q-btn @click="IrAtras()" flat round dense icon="arrow_back" />
-              <!--              <q-btn v-else flat round dense icon="map" />-->
-              <!--              <div>IMEI {{ asd }}</div>-->
-              <!--              <div>IMEI {{ IMEI }}</div>-->
-              <q-toolbar-title>Clientes</q-toolbar-title>
-            </q-toolbar>
-          </q-page-sticky>
+          <!--          <q-page-sticky position="top" expand class="bg-primary text-white">-->
+          <!--            <q-toolbar>-->
+          <!--              <q-btn-->
+          <!--                @click="IrAtras(getAtras)"-->
+          <!--                flat-->
+          <!--                round-->
+          <!--                dense-->
+          <!--                :icon="getAtras"-->
+          <!--              />-->
+          <!--              &lt;!&ndash;              <q-btn v-else flat round dense icon="map" />&ndash;&gt;-->
+          <!--              &lt;!&ndash;              <div>IMEI {{ asd }}</div>&ndash;&gt;-->
+          <!--              &lt;!&ndash;              <div>IMEI {{ IMEI }}</div>&ndash;&gt;-->
+          <!--              <q-toolbar-title>Prestamos</q-toolbar-title>-->
+          <!--            </q-toolbar>-->
+          <!--          </q-page-sticky>-->
         </q-page>
 
         <q-page-scroller position="bottom">
-          <q-btn fab icon="keyboard_arrow_up" color="red" />
+          <q-btn fab icon="keyboard_arrow_up" color="blue" />
         </q-page-scroller>
       </q-page-container>
     </q-layout>
@@ -75,7 +86,11 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
+  computed: {
+    ...mapGetters("general", ["getAtras"])
+  },
   data() {
     return {
       stopAtras: false,
@@ -159,9 +174,14 @@ export default {
       // this.IMEI = StatusBar;
       // this.IMEI = device;
     },
-    IrAtras() {
+    IrAtras(arg) {
       console.log("Ir Atras");
-      this.$router.go(-1);
+      console.log(arg);
+      if (arg == "arrow_back") {
+        this.$router.go(-1);
+      } else {
+        console.log("No hacer nada");
+      }
     },
     async URL(arg) {
       console.log("Ir a:", arg);
@@ -197,12 +217,15 @@ export default {
     console.log("this.$route.path");
     console.log(this.$route.path);
     // we register the event like on plugin's doc page
-    window.addEventListener("deviceready", this.onDeviceReady(), false);
+    // window.addEventListener("deviceready", this.onDeviceReady(), false);
     // StatusBar.backgroundColorByHexString("#333");
     // StatusBar.backgroundColorByName("red");
+    this.$store.commit("general/setAtras", "map");
+    // console.log("Simew se ejecuta created");
   },
   mounted() {
-    console.log("Simew se ejecuta");
+    // this.iconAtras("map");
+    console.log("Simew se ejecuta mount");
   }
 };
 </script>
