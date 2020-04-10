@@ -1,30 +1,48 @@
 import { axiosInstance } from "boot/axios";
 const state = {
-  Abono: []
+  Abonos: []
 };
 
 const mutations = {
-  setCredit(state, payload) {
-    state.Credits = payload;
+  setAbonos(state, payload) {
+    state.Abonos = payload;
   }
 };
 
 const actions = {
-  async addCredit({ commit }, payload) {
+  async abonarCuotas({ commit }, payload) {
     console.log("abonarCuotas");
     console.log(payload);
     // const response = await axiosInstance.get(`/api/clientes`);
-    const response = await axiosInstance.post(`/creditos/add/${payload.idcliente}`, payload);
-    console.log(response);
+    const response = await axiosInstance.post(`/abonos/add`, payload);
+    console.log(response.data);
     // commit("setCredit", response.data);
+    return response.data;
+  },
+  async callAbonos({ commit }) {
+    console.log("callAbonos");
+    // console.log(payload);
+    // const response = await axiosInstance.get(`/api/clientes`);
+    const response = await axiosInstance.get(`/abonos`);
+    console.log(response.data);
+    commit("setAbonos", response.data);
+    // return response.data;
+  },
+  async deleteAbonos({ commit }, payload) {
+    console.log("deleteAbonos");
+    console.log(payload);
+    // const response = await axiosInstance.get(`/api/clientes`);
+    const response = await axiosInstance.delete(`/abonos/delete/${payload}`);
+    // console.log(response.data);
+    // commit("setAbonos", response.data);
     return response.data;
   }
 };
 
 const getters = {
-  getCredits(state) {
-    console.log(state.Credits);
-    return state.Credits;
+  getAbonos(state) {
+    console.log(state.Abonos);
+    return state.Abonos;
   }
 };
 

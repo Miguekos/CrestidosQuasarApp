@@ -102,7 +102,7 @@ export default {
           title: "Control",
           caption: "chat.quasar.dev",
           // icon: "chat",
-          link: "https://chat.quasar.dev",
+          // link: "https://chat.quasar.dev",
           icon: "description",
           alert: "green"
         },
@@ -110,7 +110,7 @@ export default {
           title: "Config",
           caption: "forum.quasar.dev",
           // icon: "record_voice_over",
-          link: "https://forum.quasar.dev",
+          // link: "https://forum.quasar.dev",
           icon: "settings",
           alert: "blue"
         }

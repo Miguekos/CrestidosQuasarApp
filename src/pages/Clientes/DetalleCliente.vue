@@ -94,10 +94,13 @@
     <!--      &lt;!&ndash;        </div>&ndash;&gt;-->
     <!--    </q-card>-->
     <!--    {{ essentialLinksPagados }}-->
+    <!--    {{ getCredits }}-->
+    <!--    {{ getCreditsCrono }}-->
     <q-card v-for="link in getCredits" :key="link.idCliente" class="shadow-8">
       <q-expansion-item
         header-class="text-green"
-        v-model="link.expand"
+        group="somegroup"
+        @click="getDetalleCrono(link._id)"
         icon="attach_money"
         :label="`CREDITO ACTIVO POR : ${link.deuda} ./S`"
         :caption="`Cuotas de: ${link.ImporteCuotas} ./S`"
@@ -113,13 +116,40 @@
                       <q-table
                         flat
                         dense
-                        hide-bottom
-                        :data="data"
+                        :data="getCreditsCrono.pagos"
                         :columns="columns"
-                        row-key="name"
-                      />
+                        row-key="fechaIngreso"
+                        :pagination.sync="pagination"
+                      >
+                        <template v-slot:body="props">
+                          <q-tr :props="props">
+                            <q-td key="fechaIngreso" :props="props">
+                              {{ formatFecha(props.row.fechaIngreso) }}
+                            </q-td>
+                            <q-td key="cuotasPagadas" :props="props">
+                              {{ props.row.cuotasPagadas }}
+                            </q-td>
+                            <q-td
+                              key="montoAbonado"
+                              cefonoss="text-red"
+                              :props="props"
+                            >
+                              {{ props.row.montoAbonado }}
+                            </q-td>
+                          </q-tr>
+                        </template>
+                      </q-table>
                       <!--                      <q-form @submit="onSubmit" class="q-gutter-xs">-->
-                      <div class="q-mt-lg">
+                      <div
+                        v-if="getCreditsCrono.cuotasPorPagar == 0"
+                        class="text-center text-red text-h4"
+                      >
+                        Credito Cancelado
+                      </div>
+                      <div
+                        v-if="getCreditsCrono.cuotasPorPagar > 0"
+                        class="q-mt-lg"
+                      >
                         <q-item-label class="text-center" caption>
                           Selecciona cantidad de cuotas
                         </q-item-label>
@@ -128,13 +158,14 @@
                           v-model="cuotas"
                           label-always
                           :min="1"
-                          :max="link.cuotas"
+                          :max="getCreditsCrono.cuotasPorPagar"
                           :step="1"
                         />
                       </div>
 
                       <div>
                         <q-btn
+                          v-if="getCreditsCrono.cuotasPorPagar > 0"
                           size="md"
                           outline
                           class="full-width"
@@ -147,7 +178,7 @@
                     </div>
                   </q-item-label>
                   <q-item-label>
-                    <TablaDetalle />
+                    <TablaDetalle :info="getCreditsCrono" />
                   </q-item-label>
                   <!--                    <q-item-label caption-->
                   <!--                      >Ultimo pago-->
@@ -176,14 +207,23 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { date } from "quasar";
 export default {
   name: "DetalleCliente",
   computed: {
-    ...mapGetters("credit", ["getCredits"]),
+    ...mapGetters("credit", ["getCredits", "getCreditsCrono"]),
     ...mapGetters("client", ["getClienteOne"])
   },
   data() {
     return {
+      pagination: {
+        sortBy: "fechaIngreso",
+        descending: true,
+        page: 1,
+        rowsPerPage: 5
+        // rowsNumber: xx if getting data from a server
+      },
+      cliente: "",
       clienteid: null,
       dialogRegistroNuevoCredito: false,
       text: "",
@@ -192,134 +232,28 @@ export default {
       loading: false,
       expandedActivos: false,
       expandedCancelados: false,
-      info: null,
+      info: [],
       tab: "emails",
       columns: [
         {
-          name: "name",
+          name: "fechaIngreso",
           required: true,
           label: "Fecha",
           align: "left",
-          field: row => row.name,
+          field: "fechaIngreso",
           format: val => `${val}`,
           sortable: true
         },
         {
-          name: "calories",
+          name: "cuotasPagadas",
           label: "Cuotas",
-          field: "calories",
-          sortable: true
+          field: "cuotasPagadas"
         },
         {
-          name: "fat",
+          name: "montoAbonado",
           label: "Total",
-          field: "fat",
-          format: val => `${val} ./S`,
-          sortable: true
-        }
-      ],
-      data: [
-        {
-          name: "03/03/2020",
-          calories: 1,
-          fat: "25",
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: "14%",
-          iron: "1%"
-        },
-        {
-          name: "04/03/2020",
-          calories: 1,
-          fat: "25",
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: "8%",
-          iron: "1%"
-        },
-        {
-          name: "05/03/2020",
-          calories: 1,
-          fat: "25",
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: "6%",
-          iron: "7%"
-        },
-        {
-          name: "06/03/2020",
-          calories: 1,
-          fat: "25",
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: "3%",
-          iron: "8%"
-        },
-        {
-          name: "07/03/2020",
-          calories: 1,
-          fat: "25",
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: "7%",
-          iron: "16%"
-        }
-      ],
-      dataDetalle: [
-        {
-          name: "Pretamo:",
-          calories: 1,
-          fat: "25",
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: "14%",
-          iron: "1%"
-        },
-        {
-          name: "Deuda actual:",
-          calories: 1,
-          fat: "25",
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: "8%",
-          iron: "1%"
-        },
-        {
-          name: "Cuotas pagadas:",
-          calories: 1,
-          fat: "25",
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: "6%",
-          iron: "7%"
-        },
-        {
-          name: "06/03/2020",
-          calories: 1,
-          fat: "25",
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: "3%",
-          iron: "8%"
-        },
-        {
-          name: "07/03/2020",
-          calories: 1,
-          fat: "25",
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: "7%",
-          iron: "16%"
+          field: "montoAbonado",
+          format: val => `${val} ./S`
         }
       ],
       essentialLinks: [
@@ -375,15 +309,27 @@ export default {
     };
   },
   methods: {
-    ...mapActions("credit", ["callCredit"]),
+    ...mapActions("credit", ["callCredit", "callCreditCrono"]),
     ...mapActions("client", ["callClienteOne"]),
-    onSubmit(arg) {
+    ...mapActions("pagos", ["abonarCuotas"]),
+    formatFecha(arg) {
+      return date.formatDate(arg, "DD-MM-YYYY HH:mm:ss");
+    },
+    async onSubmit(arg) {
       console.log(arg);
       const body = {
         ...arg,
+        cliente: this.getClienteOne.name,
+        dni: this.getClienteOne.dni,
         cuotasPagadas: this.cuotas
       };
       console.log(body);
+      this.cuotas = 1;
+      await this.abonarCuotas(body);
+      // console.log("asdadad");
+      // console.log(arg._id.$oid)
+      await this.callCreditCrono(arg._id.$oid);
+      // console.log("asdadad");
       // const formData = new FormData(evt.target);
       // const submitResult = [];
       // for (const [name, value] of formData.entries()) {
@@ -396,6 +342,10 @@ export default {
       // }
 
       // this.submitResult = submitResult;
+    },
+    async getDetalleCrono(arg) {
+      console.log(arg.$oid);
+      await this.callCreditCrono(arg.$oid);
     },
     onLeft({ reset }) {
       this.$q.notify("Left action triggered. Resetting in 1 second.");
@@ -421,7 +371,8 @@ export default {
     Registro: () => import("../../components/dielogRegistroNuevoCredito"),
     TablaDetalle: () => import("./tablaDetalle")
   },
-  async created() {
+  async mounted() {
+    console.log("Created");
     await this.callClienteOne(this.$route.params.id);
     console.log(this.$route.params);
     this.clienteid = this.$route.params;
