@@ -1,70 +1,73 @@
 <template>
-  <div v-touch-swipe.mouse.left="handleSwipe" class="">
-    <q-table
-      grid-header
-      :data="getClientes"
-      :columns="columns"
-      row-key="created_at.$date"
-      flat
-      hide-bottom
-      :pagination.sync="pagination"
-      :loading="loading"
-      :filter="filter"
-      binary-state-sort
-    >
-      <template v-slot:top>
-        <q-input
-          class="full-width"
-          outlined
-          dense
-          debounce="300"
-          v-model="filter"
-          placeholder="Buscar"
-        >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-      </template>
-      <template v-slot:header="props">
-        <q-tr :props="props">
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class=""
-            style="font-size: 16px"
-          >
-            {{ col.label }}
-          </q-th>
-        </q-tr>
-      </template>
-      <template v-slot:body="props">
-        <q-tr :props="props" @click="detalleCliente(props.row)">
-          <q-td key="name" :props="props">
-            {{ props.row.name }}
-            <label class="my-table-details">
-              {{ props.row.dni }}
-            </label>
-          </q-td>
-          <q-td key="telefono" :props="props">
-            {{ props.row.telefono }}
-          </q-td>
-          <q-td key="created_at.$date" cefonoss="text-red" :props="props">
-            {{ formatFecha(props.row.created_at.$date) }}
-          </q-td>
-        </q-tr>
-      </template>
-    </q-table>
-    <!--    <q-page style="padding-top: 160px; padding-bottom: 70px" class="q-pa-md">-->
-    <!--      <q-page-sticky position="top" expand class="bg-accent text-white">-->
-    <!--        <q-toolbar>-->
-    <!--          <q-btn flat round dense icon="map" />-->
-    <!--          <q-toolbar-title>Title</q-toolbar-title>-->
-    <!--        </q-toolbar>-->
-    <!--      </q-page-sticky>-->
-    <!--    </q-page>-->
-  </div>
+  <transition
+    appear
+    enter-active-class="animated fadeIn"
+    leave-active-class="animated fadeOut"
+  >
+    <div v-touch-swipe.mouse.left="handleSwipe" class="conSearch">
+      <q-table
+        :data="getClientes"
+        :columns="columns"
+        row-key="created_at.$date"
+        flat
+        hide-bottom
+        :pagination.sync="pagination"
+        :loading="loading"
+        :filter="filter"
+        binary-state-sort
+      >
+        <template v-slot:header="props">
+          <q-tr :props="props">
+            <q-th
+              v-for="col in props.cols"
+              :key="col.name"
+              :props="props"
+              class="text-primary text-bold"
+              style="font-size: 16px"
+            >
+              {{ col.label }}
+            </q-th>
+          </q-tr>
+        </template>
+        <template v-slot:body="props">
+          <q-tr :props="props" @click="detalleCliente(props.row)">
+            <q-td key="name" :props="props">
+              <b class="detalletable">
+                {{ props.row.name }}
+              </b>
+              <label class="my-table-details">
+                {{ props.row.dni }}
+              </label>
+            </q-td>
+            <q-td key="telefono" :props="props">
+              {{ props.row.telefono }}
+            </q-td>
+            <q-td key="created_at.$date" cefonoss="text-red" :props="props">
+              {{ formatFecha(props.row.created_at.$date) }}
+            </q-td>
+          </q-tr>
+        </template>
+      </q-table>
+      <!--    <q-page style="padding-top: 160px; padding-bottom: 70px" class="q-pa-md">-->
+      <!--      <q-page-sticky position="top" expand class="bg-accent text-white">-->
+      <!--        <q-toolbar>-->
+      <!--          <q-btn flat round dense icon="map" />-->
+      <!--          <q-toolbar-title>Title</q-toolbar-title>-->
+      <!--        </q-toolbar>-->
+      <!--      </q-page-sticky>-->
+      <!--    </q-page>-->
+      <q-page-sticky position="top" expand class="bg-white">
+        <q-toolbar>
+          <!--        <q-btn @click="IrAtras(getAtras)" flat round dense :icon="getAtras" />-->
+          <!--        &lt;!&ndash;              <q-btn v-else flat round dense icon="map" />&ndash;&gt;-->
+          <!--        &lt;!&ndash;              <div>IMEI {{ asd }}</div>&ndash;&gt;-->
+          <!--        &lt;!&ndash;              <div>IMEI {{ IMEI }}</div>&ndash;&gt;-->
+          <!--        <q-toolbar-title>Prestamos</q-toolbar-title>-->
+          <Search class="col" />
+        </q-toolbar>
+      </q-page-sticky>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -133,6 +136,9 @@ export default {
       // console.log(evt)
     }
   },
+  components: {
+    Search: () => import("../../components/Search")
+  },
   async mounted() {
     this.loading = true;
     await this.callCliente();
@@ -162,5 +168,17 @@ export default {
   white-space: pre-line;
   color: #93939a;
   margin-top: 5px;
+  /*word-wrap: break-word;*/
+}
+.detalletable {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  width: 100px;
+}
+.conSearch {
+  padding-top: 45px;
 }
 </style>

@@ -20,20 +20,6 @@
       :filter="filter"
       binary-state-sort
     >
-      <template v-slot:top>
-        <q-input
-          class="full-width"
-          outlined
-          dense
-          debounce="300"
-          v-model="filter"
-          placeholder="Buscar"
-        >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-      </template>
       <template v-slot:header="props">
         <q-tr :props="props">
           <q-th
