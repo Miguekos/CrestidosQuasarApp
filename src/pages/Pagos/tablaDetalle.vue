@@ -12,7 +12,7 @@
     <!--      ]"-->
     <!--    />-->
 
-    <q-markup-table dense :separator="separator" bordered>
+    <q-markup-table flat class="bg-grey-4" dense :separator="separator" bordered>
       <!--      <thead>-->
       <!--        <tr>-->
       <!--          <th class="text-left">Prestamo:</th>-->

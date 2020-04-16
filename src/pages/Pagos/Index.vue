@@ -1,5 +1,6 @@
 <template>
-  <div v-touch-swipe.mouse.left="handleSwipe" class="">
+  <!--  <div v-touch-swipe.mouse.left="handleSwipe" class="">-->
+  <div>
     <!--    <q-input-->
     <!--      borderless-->
     <!--      dense-->
@@ -8,8 +9,9 @@
     <!--      placeholder="Search"-->
     <!--    />-->
     <q-table
+      v-if="getAbonos.length != 0"
       grid-header
-      class=""
+      class="transparent"
       :data="getAbonos"
       :columns="columns"
       row-key="created_at.$date"
@@ -26,7 +28,7 @@
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
-            class=""
+            class="text-primary text-bold"
             style="font-size: 16px"
           >
             {{ col.label }}
@@ -38,43 +40,56 @@
           <q-td key="cliente" :props="props">
             {{ props.row.cliente }}
             <label class="my-table-details">
-              {{ props.row.dni }}
+              Cuotas: {{ props.row.cuotasPagadas }}
             </label>
           </q-td>
-          <q-td key="montoTotalAbonado" :props="props">
-            {{ props.row.montoTotalAbonado }} ./S
-          </q-td>
-          <q-td key="created_at.$date" cefonoss="text-red" :props="props">
-            {{ formatFecha(props.row.created_at.$date) }}
+          <q-td key="created_at.$date" :props="props">
+            {{ props.row.montoTotalAbonado }} ./s
+            <label class="my-table-details">
+              {{ formatFecha(props.row.created_at.$date) }}
+            </label>
           </q-td>
         </q-tr>
       </template>
       <template v-slot:no-data="{ icon, message, filter }">
         <div class="full-width row flex-center text-accent q-gutter-sm">
           <q-icon size="2em" name="sentiment_dissatisfied" />
-          <span> Well this is sad... {{ message }} </span>
-          <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon" />
+          <span> No hay data que mostrar </span>
+          <!--          <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon" />-->
         </div>
       </template>
     </q-table>
-    <q-dialog v-model="card">
-      <q-card class="my-card full-width">
+    <div
+      v-else
+      style="padding-bottom: 450px; padding-top: 10px;"
+      class="text-center text-h5"
+    >
+      <div>
+        <!--        {{ $q.screen.height }}-->
+        Pagos sin registrar
+      </div>
+      <div>
+        <span class="text-caption">{{ formatFecha(Date.now()) }}</span>
+      </div>
+    </div>
+    <q-dialog v-model="card" persistent>
+      <q-card class="my-card full-width bg-grey-4">
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-xs">
           <!--        <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />-->
           <q-toolbar>
-            <q-avatar>
-              <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" />
-            </q-avatar>
+            <!--            <q-avatar>-->
+            <!--              <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" />-->
+            <!--            </q-avatar>-->
 
             <q-toolbar-title
               ><span class="text-weight-bold">{{
                 clienteDetalle.cliente
               }}</span></q-toolbar-title
             >
-            <q-btn flat round dense icon="close" v-close-popup />
+            <q-btn round color="primary" dense icon="close" v-close-popup />
           </q-toolbar>
 
-          <q-card-section class="q-pa-xs">
+          <q-card-section id="test" class="q-pa-xs">
             <div class="text-center text-caption text-red">
               Abono por:
               <strong>{{ clienteDetalle.montoTotalAbonado }} ./S</strong>
@@ -92,15 +107,15 @@
           <q-card-actions align="right">
             <!--          <q-btn v-close-popup flat color="primary" label="Cerrar" />-->
             <!--            <q-btn flat type="reset" color="positive" label="Cerrar" />-->
-            <q-input
-              dense
-              outlined
-              placeholder="Escriba Elminar"
-              autofocus
-              color="primary"
-              v-model="text"
-            />
-            <q-btn flat type="submit" color="negative" label="Eliminar" />
+            <!--            <q-input-->
+            <!--              dense-->
+            <!--              outlined-->
+            <!--              placeholder="Escriba Elminar"-->
+            <!--              autofocus-->
+            <!--              color="primary"-->
+            <!--              v-model="text"-->
+            <!--            />-->
+            <q-btn type="submit" color="negative" label="Eliminar" />
           </q-card-actions>
         </q-form>
       </q-card>
@@ -115,6 +130,7 @@
 </template>
 
 <script>
+import { dom } from "quasar";
 import { mapGetters, mapActions } from "vuex";
 import { date } from "quasar";
 export default {
@@ -150,18 +166,10 @@ export default {
           format: val => `${val}`
         },
         {
-          name: "montoTotalAbonado",
-          align: "right",
-          label: "Monto",
-          field: "montoTotalAbonado"
-        },
-        {
           name: "created_at.$date",
           align: "right",
-          label: "Fecha",
-          field: "created_at.$date",
-          required: true,
-          sortable: true
+          label: "Monto",
+          field: "created_at.$date"
         }
       ]
     };
@@ -171,29 +179,73 @@ export default {
     ...mapActions("credit", ["callCredit", "callCreditCrono"]),
     async onSubmit() {
       console.log(this.clienteDetalle._id.$oid);
-      if (this.text == "Eliminar") {
-        await this.deleteAbonos(this.clienteDetalle._id.$oid);
-        await this.callAbonos();
-        console.log("Eliminado");
-        this.card = false;
-        this.$q.notify({
-          position: "top-right",
-          color: "green",
-          message: "Se elimno Correctamente"
-        });
-      } else {
-        this.$q.notify({
-          position: "top-right",
-          color: "red",
-          message: "Debe escribnir 'Eliminar' para confirmar"
-        });
-      }
+      await this.deleteAbonos(this.clienteDetalle._id.$oid);
+      await this.callAbonos();
+      this.card = false;
+      // if (this.text == "Eliminar") {
+      //   await this.deleteAbonos(this.clienteDetalle._id.$oid);
+      //   await this.callAbonos();
+      //   console.log("Eliminado");
+      //   this.card = false;
+      //   this.$q.notify({
+      //     position: "top-right",
+      //     color: "green",
+      //     message: "Se elimno Correctamente"
+      //   });
+      // } else {
+      //   this.$q.notify({
+      //     position: "top-right",
+      //     color: "red",
+      //     message: "Debe escribnir 'Eliminar' para confirmar"
+      //   });
+      // }
     },
     onReset() {
       console.log("Se intento Reinciar");
     },
     formatFecha(arg) {
-      return date.formatDate(arg, "DD-MM-YY - HH:mm");
+      let formattedString = date.formatDate(arg, "ddd DD/MM/YY - hh:mm a", {
+        days: [
+          "Domingo",
+          "Lunes",
+          "Martes",
+          "Miércoles",
+          "Jueves",
+          "Viernes",
+          "Sábado"
+        ],
+        daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+        months: [
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre"
+        ],
+        monthsShort: [
+          "Ene",
+          "Feb",
+          "Mar",
+          "Abr",
+          "May",
+          "Jun",
+          "Jul",
+          "Ago",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dic"
+        ]
+      });
+      // console.log(formattedString);
+      return formattedString;
     },
     async detalleCliente(arg) {
       await this.callCreditCrono(arg.idCredito);
@@ -224,6 +276,11 @@ export default {
     this.loading = false;
   },
   async created() {
+    // const { height, width, viewport, style } = dom;
+    // console.log(style(DomElement, "height"));
+    // const { height, offset } = dom;
+    // console.log(dom);
+    // let { height, width } = viewport();
     console.log("Create Abonados");
     // await this.callAbonos();
     this.$q.loading.show({

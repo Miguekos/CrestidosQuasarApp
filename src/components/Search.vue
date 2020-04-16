@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mt-sm">
+  <div class="">
     <q-input dense square outlined placeholder="Buscar" v-model="searchField">
       <!--      <template v-slot:before>-->
       <!--        <q-icon name="search" />-->

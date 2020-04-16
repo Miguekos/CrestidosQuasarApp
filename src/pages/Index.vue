@@ -1,14 +1,13 @@
 <template>
-  <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-full.svg"
-    >
-  </q-page>
+  <Tabs />
 </template>
 
 <script>
 export default {
-  name: 'PageIndex'
-}
+  name: "PageIndex",
+  components: {
+    Tabs: () => import("../layouts/Tabs")
+    // Search: () => import("../components/Search")
+  }
+};
 </script>

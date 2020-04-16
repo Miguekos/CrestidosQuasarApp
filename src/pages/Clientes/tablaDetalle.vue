@@ -29,6 +29,10 @@
           <td class="text-right">{{ info.deudaActual }} ./S</td>
         </tr>
         <tr>
+          <td class="text-left">Importe por cuotas:</td>
+          <td class="text-primary text-bold text-right">{{ info.importeCuota }} ./S</td>
+        </tr>
+        <tr>
           <td class="text-left">Cuotas Canceladas:</td>
           <td class="text-right">{{ info.totalCuotasPagadas }}</td>
         </tr>
@@ -38,7 +42,9 @@
         </tr>
         <tr>
           <td class="text-left">Cuotas Vencidas:</td>
-          <td v-if="info.DiasMora > 0" class="text-red text-right"><strong>{{ info.DiasMora }}</strong></td>
+          <td v-if="info.DiasMora > 0" class="text-red text-right">
+            <strong>{{ info.DiasMora }}</strong>
+          </td>
           <td v-else class="text-right">0</td>
         </tr>
       </tbody>

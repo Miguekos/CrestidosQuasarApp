@@ -1,16 +1,17 @@
 import { axiosInstance } from "boot/axios";
+import { date } from "quasar";
 const state = {
-  iconAtras: "map"
+  backbutton: false
 };
 
 const mutations = {
   setAtras(state, payload) {
-    state.iconAtras = payload;
+    state.backbutton = payload;
   }
 };
 
 const actions = {
-  async iconAtras({ commit }, payload) {
+  iconAtras({ commit }, payload) {
     console.log("deleteAbonos");
     console.log(payload);
     console.log("deleteAbonos");

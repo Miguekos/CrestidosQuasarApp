@@ -1,73 +1,19 @@
 <template>
-  <div class="q-pa-md">
-    <q-layout view="lhh LpR lff">
-      <q-header reveal class="bg-primary">
+  <div class="">
+    <q-layout class="bg-grey-4" view="lhh LpR lff">
+      <q-header reveal class="bg-primary text-white">
         <q-toolbar>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" />
-          </q-avatar>
-          <q-space></q-space>
-          <!--          <q-toolbar-title>Control de Creditos</q-toolbar-title>-->
-          <!--          <q-input-->
-          <!--            class="GPL__toolbar-input"-->
-          <!--            dense-->
-          <!--            standout="bg-primary"-->
-          <!--            v-model="search"-->
-          <!--            placeholder="Search"-->
-          <!--          >-->
-          <!--            <template v-slot:prepend>-->
-          <!--              <q-icon v-if="search === ''" name="search" />-->
-          <!--              <q-icon-->
-          <!--                v-else-->
-          <!--                name="clear"-->
-          <!--                class="cursor-pointer"-->
-          <!--                @click="search = ''"-->
-          <!--              />-->
-          <!--            </template>-->
-          <!--          </q-input>-->
-          <q-input
-            dark
-            standout
+          <q-btn
+            v-if="backbutton"
+            @click="IrAtras(getAtras)"
+            flat
+            round
             dense
-            v-model="text"
-            label="Buscar"
-            :readonly="readonly"
-            :disable="disable"
-          >
-            <template v-slot:prepend>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-
-          <q-space></q-space>
-
-          <q-btn round icon="more_vert" flat color="white" size="sx">
-            <q-menu transition-show="scale" transition-hide="scale" fit>
-              <q-list style="min-width: 100px">
-                <q-item clickable>
-                  <q-item-section>Perfil</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Contraseña</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable>
-                  <q-item-section>Notificaciones</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Historial</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable>
-                  <q-item-section>Settings</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable>
-                  <q-item-section>Salir</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
+            icon="arrow_back"
+          />
+          <q-btn v-else flat round dense icon="map" />
+          <q-toolbar-title @click="home">Prestamos</q-toolbar-title>
+          <!--          <Search />-->
         </q-toolbar>
       </q-header>
 
@@ -77,38 +23,20 @@
       <!--        </q-toolbar>-->
       <!--      </q-footer>-->
       <q-page-container>
-        <q-page style="padding-top: 30px; padding-bottom: 40px">
-          <transition
-            appear
-            enter-active-class="animated fadeIn"
-            leave-active-class="animated fadeOut"
-          >
-            <!-- Wrapping only one DOM element, defined by QBtn -->
-            <router-view />
-          </transition>
-
-          <q-page-sticky position="bottom-right" :offset="[22, 22]">
-            <q-btn
-              size="18px"
-              round
-              color="positive"
-              icon="add"
-              class="rotate-0"
-            />
-          </q-page-sticky>
-
-          <q-page-sticky position="top" expand class="bg-primary text-white">
-            <q-tabs v-model="tab">
-              <q-tab
-                v-for="link in essentialLinks"
-                :key="link.title"
-                @click="URL(link.link)"
-                :name="link.title"
-                :label="link.title"
-                :icon="link.icon"
-              />
-            </q-tabs>
-          </q-page-sticky>
+        <q-page class="bg-grey-4">
+          <router-view></router-view>
+          <!--          <q-page-sticky position="top" expand class="bg-primary text-white">-->
+          <!--            <q-tabs v-model="tab">-->
+          <!--              <q-tab-->
+          <!--                v-for="link in essentialLinks"-->
+          <!--                :key="link.title"-->
+          <!--                @click="URL(link.link)"-->
+          <!--                :name="link.title"-->
+          <!--                :label="link.title"-->
+          <!--                :icon="link.icon"-->
+          <!--              />-->
+          <!--            </q-tabs>-->
+          <!--          </q-page-sticky>-->
         </q-page>
 
         <q-page-scroller position="bottom">
@@ -119,14 +47,14 @@
   </div>
 </template>
 <script>
-import { fabGithub } from "@quasar/extras/fontawesome-v5";
-const stringOptions = [
-  "quasarframework/quasar",
-  "quasarframework/quasar-awesome"
-];
+import { mapState, mapActions } from "vuex";
 export default {
+  computed: {
+    ...mapState("general", ["backbutton"])
+  },
   data() {
     return {
+      dialogRegistro: false,
       readonly: false,
       disable: false,
       text: "",
@@ -180,45 +108,25 @@ export default {
     };
   },
   methods: {
+    ...mapActions("general", ["iconAtras"]),
+    home() {
+      this.$router.push("/");
+    },
+    IrAtras(arg) {
+      this.$router.go(-1);
+      console.log("Ir Atras");
+      console.log(arg);
+      // if (arg == "arrow_back") {
+      //   this.$router.go(-1);
+      // } else {
+      //   console.log("No hacer nada");
+      // }
+    },
     handleSwipe({ evt, ...info }) {
       this.info = info;
       this.$router.push("/pagos");
       // native Javascript event
       // console.log(evt)
-    },
-    filter(val, update) {
-      if (this.options === null) {
-        // load data
-        setTimeout(() => {
-          this.options = stringOptions;
-          this.$refs.search.filter("");
-        }, 2000);
-        update();
-        return;
-      }
-
-      if (val === "") {
-        update(() => {
-          this.filteredOptions = this.options.map(op => ({ label: op }));
-        });
-        return;
-      }
-
-      update(() => {
-        this.filteredOptions = [
-          {
-            label: val,
-            type: "In this repository"
-          },
-          {
-            label: val,
-            type: "All GitHub"
-          },
-          ...this.options
-            .filter(op => op.toLowerCase().includes(val.toLowerCase()))
-            .map(op => ({ label: op }))
-        ];
-      });
     },
     async URL(arg) {
       console.log("Ir a:", arg);
@@ -261,8 +169,26 @@ export default {
       // }
     }
   },
+  components: {
+    Tabs: () => import("./Tabs"),
+    Search: () => import("../components/Search")
+  },
   created() {
-    this.fabGithub = fabGithub;
+    // this.iconAtras(false);
+    this.$q.addressbarColor.set("#0056a1");
+    this.stopAtras = false;
+    console.log("this.$route.path");
+    console.log(this.$route.path);
+    // we register the event like on plugin's doc page
+    // window.addEventListener("deviceready", this.onDeviceReady(), false);
+    // StatusBar.backgroundColorByHexString("#333");
+    // StatusBar.backgroundColorByName("red");
+    this.$store.commit("general/setAtras", false);
+    // console.log("Simew se ejecuta created");
+  },
+  mounted() {
+    // this.iconAtras("map");
+    console.log("Simew se ejecuta mount");
   }
 };
 </script>

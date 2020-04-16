@@ -4,7 +4,7 @@
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-xs">
       <q-input
         dense
-        filled
+        outlined
         autofocus
         v-model="name"
         label="Nombre *"
@@ -16,7 +16,7 @@
 
       <q-input
         dense
-        filled
+        outlined
         maxlength="9"
         type="number"
         v-model="dni"
@@ -32,7 +32,7 @@
 
       <q-input
         dense
-        filled
+        outlined
         maxlength="9"
         type="number"
         counter
