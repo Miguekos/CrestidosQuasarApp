@@ -1,25 +1,27 @@
 import { axiosInstance } from "boot/axios";
 import { date } from "quasar";
 const state = {
-  backbutton: false
+  backbutton: false,
+  searchactive: false
 };
 
 const mutations = {
   setAtras(state, payload) {
     state.backbutton = payload;
+  },
+  setSearch(state, payload) {
+    state.searchactive = payload;
   }
 };
 
 const actions = {
   iconAtras({ commit }, payload) {
-    console.log("deleteAbonos");
     console.log(payload);
-    console.log("deleteAbonos");
-    // const response = await axiosInstance.get(`/api/clientes`);
-    // const response = await axiosInstance.delete(`/abonos/delete/${payload}`);
-    // console.log(response.data);
     commit("setAtras", payload);
-    // return response.data;
+  },
+  searchAction({ commit }, payload) {
+    console.log(payload);
+    commit("setSearch", payload);
   }
 };
 

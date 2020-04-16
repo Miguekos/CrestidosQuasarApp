@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <q-input dense square outlined placeholder="Buscar" v-model="searchField">
+    <q-input dense borderless dark input-class="text-right" size="10px" v-model="searchField">
       <!--      <template v-slot:before>-->
       <!--        <q-icon name="search" />-->
       <!--      </template>-->

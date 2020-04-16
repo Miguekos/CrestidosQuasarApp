@@ -4,7 +4,7 @@
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-xs">
       <q-input
         dense
-        outlined
+        counter
         autofocus
         v-model="monto"
         label="Monto *"
@@ -15,11 +15,20 @@
         ]"
       />
 
-      <q-input dense outlined type="number" v-model="cuotas" label="Cuotas *" />
+      <!--      <q-separator color="primary" inset />-->
+
+      <q-input
+        :disable="true"
+        dense
+        counter
+        type="number"
+        v-model="cuotas"
+        label="Cuotas *"
+      />
 
       <q-input
         dense
-        outlined
+        counter
         type="text"
         v-model="interes"
         label="Intereses *"

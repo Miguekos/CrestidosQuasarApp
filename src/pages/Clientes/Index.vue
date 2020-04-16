@@ -47,24 +47,6 @@
         </q-tr>
       </template>
     </q-table>
-    <!--    <q-page style="padding-top: 160px; padding-bottom: 70px" class="q-pa-md">-->
-    <!--      <q-page-sticky position="top" expand class="bg-accent text-white">-->
-    <!--        <q-toolbar>-->
-    <!--          <q-btn flat round dense icon="map" />-->
-    <!--          <q-toolbar-title>Title</q-toolbar-title>-->
-    <!--        </q-toolbar>-->
-    <!--      </q-page-sticky>-->
-    <!--    </q-page>-->
-    <!--      <q-page-sticky position="top" expand class="bg-white transparent">-->
-    <!--        <q-toolbar>-->
-    <!--        <q-btn @click="IrAtras(getAtras)" flat round dense :icon="getAtras" />-->
-    <!--        &lt;!&ndash;              <q-btn v-else flat round dense icon="map" />&ndash;&gt;-->
-    <!--        &lt;!&ndash;              <div>IMEI {{ asd }}</div>&ndash;&gt;-->
-    <!--        &lt;!&ndash;              <div>IMEI {{ IMEI }}</div>&ndash;&gt;-->
-    <!--        <q-toolbar-title>Prestamos</q-toolbar-title>-->
-    <!--          <Search class="col" />-->
-    <!--        </q-toolbar>-->
-    <!--      </q-page-sticky>-->
     <q-page-sticky position="bottom-right" :offset="[22, 22]">
       <q-btn
         size="16px"
@@ -83,6 +65,7 @@
 
 <script>
 import { Fechas } from "src/directives/formatFecha";
+import { QSpinnerGears } from "quasar";
 import { mapGetters, mapActions, mapState } from "vuex";
 import { date } from "quasar";
 export default {
@@ -133,9 +116,6 @@ export default {
       return Fechas.Corta(arg);
       // return date.formatDate(arg, "DD-MM-YYYY");
     },
-    formatFecha(arg) {
-      return date.formatDate(arg, "DD-MM-YYYY");
-    },
     detalleCliente(arg) {
       console.log("DetallesDelClienteSeleccionado");
       console.log(arg._id.$oid);
@@ -156,23 +136,22 @@ export default {
     Search: () => import("../../components/Search"),
     Registro: () => import("../../components/dielogRegistro")
   },
-  async mounted() {
+  async mounted() {},
+  async created() {
     this.loading = true;
-    await this.callCliente();
-    this.loading = false;
-  },
-  created() {
     console.log("created - Cliente");
-    this.$q.loading.show({
-      spinnerColor: "blue",
-      spinnerSize: 100,
-      backgroundColor: "grey",
-      message: "Loading..",
-      messageColor: "black"
-    });
+    // this.$q.loading.show({
+    //   spinner: QSpinnerGears,
+    //   spinnerColor: "blue",
+    //   spinnerSize: 100,
+    //   backgroundColor: "grey-4"
+    // });
+    await this.callCliente();
     this.$store.commit("general/setAtras", false);
+    this.$store.commit("general/setSearch", true);
     this.$q.addressbarColor.set("#0056a1");
-    this.$q.loading.hide();
+    // this.$q.loading.hide();
+    this.loading = false;
   }
 };
 </script>
@@ -185,17 +164,5 @@ export default {
   white-space: pre-line;
   color: #93939a;
   margin-top: 5px;
-  /*word-wrap: break-word;*/
-}
-.detalletable {
-  /*overflow: hidden;*/
-  /*text-overflow: ellipsis;*/
-  /*display: -webkit-box;*/
-  /*-webkit-line-clamp: 2; !* number of lines to show *!*/
-  /*-webkit-box-orient: vertical;*/
-  /*width: 100px;*/
-}
-.conSearch {
-  /*padding-top: 50px;*/
 }
 </style>

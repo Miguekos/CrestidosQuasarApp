@@ -1,8 +1,8 @@
 <template>
   <div class="full-width">
-    <q-card>
+    <q-card class="bg-grey-4">
       <q-card-section>
-        <div class="text-center">Agregar cliente</div>
+        <div class="text-center text-h6"><u>Agregar cliente</u></div>
       </q-card-section>
 
       <q-separator />

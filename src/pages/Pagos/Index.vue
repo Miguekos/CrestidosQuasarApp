@@ -1,13 +1,5 @@
 <template>
-  <!--  <div v-touch-swipe.mouse.left="handleSwipe" class="">-->
   <div>
-    <!--    <q-input-->
-    <!--      borderless-->
-    <!--      dense-->
-    <!--      debounce="300"-->
-    <!--      v-model="filter"-->
-    <!--      placeholder="Search"-->
-    <!--    />-->
     <q-table
       v-if="getAbonos.length != 0"
       grid-header
@@ -46,7 +38,7 @@
           <q-td key="created_at.$date" :props="props">
             {{ props.row.montoTotalAbonado }} ./s
             <label class="my-table-details">
-              {{ formatFecha(props.row.created_at.$date) }}
+              {{ formatDate(props.row.created_at.$date) }}
             </label>
           </q-td>
         </q-tr>
@@ -69,18 +61,13 @@
         Pagos sin registrar
       </div>
       <div>
-        <span class="text-caption">{{ formatFecha(Date.now()) }}</span>
+        <span class="text-caption">{{ formatDate(Date.now()) }}</span>
       </div>
     </div>
     <q-dialog v-model="card" persistent>
       <q-card class="my-card full-width bg-grey-4">
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-xs">
-          <!--        <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />-->
           <q-toolbar>
-            <!--            <q-avatar>-->
-            <!--              <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" />-->
-            <!--            </q-avatar>-->
-
             <q-toolbar-title
               ><span class="text-weight-bold">{{
                 clienteDetalle.cliente
@@ -105,16 +92,6 @@
           <q-separator />
 
           <q-card-actions align="right">
-            <!--          <q-btn v-close-popup flat color="primary" label="Cerrar" />-->
-            <!--            <q-btn flat type="reset" color="positive" label="Cerrar" />-->
-            <!--            <q-input-->
-            <!--              dense-->
-            <!--              outlined-->
-            <!--              placeholder="Escriba Elminar"-->
-            <!--              autofocus-->
-            <!--              color="primary"-->
-            <!--              v-model="text"-->
-            <!--            />-->
             <q-btn type="submit" color="negative" label="Eliminar" />
           </q-card-actions>
         </q-form>
@@ -130,6 +107,7 @@
 </template>
 
 <script>
+import { Fechas } from "src/directives/formatFecha";
 import { dom } from "quasar";
 import { mapGetters, mapActions } from "vuex";
 import { date } from "quasar";
@@ -177,93 +155,25 @@ export default {
   methods: {
     ...mapActions("pagos", ["callAbonos", "deleteAbonos"]),
     ...mapActions("credit", ["callCredit", "callCreditCrono"]),
+    formatDate(arg) {
+      console.log("Formateando Fecha");
+      return Fechas.larga(arg);
+      // return date.formatDate(arg, "DD-MM-YYYY");
+    },
     async onSubmit() {
       console.log(this.clienteDetalle._id.$oid);
       await this.deleteAbonos(this.clienteDetalle._id.$oid);
       await this.callAbonos();
       this.card = false;
-      // if (this.text == "Eliminar") {
-      //   await this.deleteAbonos(this.clienteDetalle._id.$oid);
-      //   await this.callAbonos();
-      //   console.log("Eliminado");
-      //   this.card = false;
-      //   this.$q.notify({
-      //     position: "top-right",
-      //     color: "green",
-      //     message: "Se elimno Correctamente"
-      //   });
-      // } else {
-      //   this.$q.notify({
-      //     position: "top-right",
-      //     color: "red",
-      //     message: "Debe escribnir 'Eliminar' para confirmar"
-      //   });
-      // }
     },
     onReset() {
       console.log("Se intento Reinciar");
     },
-    formatFecha(arg) {
-      let formattedString = date.formatDate(arg, "ddd DD/MM/YY - hh:mm a", {
-        days: [
-          "Domingo",
-          "Lunes",
-          "Martes",
-          "Miércoles",
-          "Jueves",
-          "Viernes",
-          "Sábado"
-        ],
-        daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
-        months: [
-          "Enero",
-          "Febrero",
-          "Marzo",
-          "Abril",
-          "Mayo",
-          "Junio",
-          "Julio",
-          "Agosto",
-          "Septiembre",
-          "Octubre",
-          "Noviembre",
-          "Diciembre"
-        ],
-        monthsShort: [
-          "Ene",
-          "Feb",
-          "Mar",
-          "Abr",
-          "May",
-          "Jun",
-          "Jul",
-          "Ago",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dic"
-        ]
-      });
-      // console.log(formattedString);
-      return formattedString;
-    },
     async detalleCliente(arg) {
       await this.callCreditCrono(arg.idCredito);
       this.clienteDetalle = arg;
-      // this.$router.push("/clientes/detallecliente/1");
-      // this.$q.dialog({});
-      // this.toolbar = true;
       this.card = true;
       console.log(arg);
-    },
-    detallesDeCredito(arg) {
-      console.log(arg);
-    },
-    handleSwipe({ evt, ...info }) {
-      this.info = info;
-      this.$router.push("/pagos");
-      // native Javascript event
-      // console.log(evt)
     }
   },
   components: {
@@ -290,6 +200,8 @@ export default {
       message: "Loading..",
       messageColor: "black"
     });
+    this.$store.commit("general/setAtras", false);
+    this.$store.commit("general/setSearch", false);
     this.$q.addressbarColor.set("#0056a1");
     this.$q.loading.hide();
   }

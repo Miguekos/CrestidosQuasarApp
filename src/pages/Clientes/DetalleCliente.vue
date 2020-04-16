@@ -6,7 +6,7 @@
   >
     <div class="q-gutter-md q-pa-md bg-grey-4">
       <q-card flat class="shadow-8 transparent">
-        <q-item clickable v-ripple>
+        <q-item v-ripple>
           <q-item-section avatar>
             <q-avatar>
               <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
@@ -16,10 +16,13 @@
           <q-item-section>
             <q-item-label>{{ getClienteOne.name }}</q-item-label>
             <q-item-label caption>
-              {{ getClienteOne.dni }}
+              <span class="text-primary text-bold">dni:</span> {{ getClienteOne.dni }}
             </q-item-label>
             <q-item-label caption>
-              {{ getClienteOne.telefono }}
+              <span class="text-primary text-bold">telf:</span> {{ getClienteOne.telefono }}
+            </q-item-label>
+            <q-item-label caption>
+              <q-rating size="18px" v-model="stars" :max="5" color="primary" />
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -149,6 +152,7 @@ export default {
   },
   data() {
     return {
+      stars: 3,
       loadingboronabonar: false,
       pagination: {
         sortBy: "fechaIngreso",
@@ -309,26 +313,17 @@ export default {
   },
   async mounted() {
     this.$store.commit("general/setAtras", true);
+    this.$store.commit("general/setSearch", false);
     this.$q.loading.show({
       spinnerColor: "blue",
       spinnerSize: 100,
-      backgroundColor: "grey",
-      message: "Loading..",
-      messageColor: "black"
+      backgroundColor: "grey-4"
     });
     this.clienteid = this.$route.params;
     await this.callClienteOne(this.$route.params.id);
     await this.callCredit(this.$route.params);
     console.log(this.$route.params);
     console.log("Created");
-    // if (this.getCredits[0]) {
-    //   console.log("si tiene");
-    //   console.log(this.getCredits[0]._id);
-    //   await this.getDetalleCrono(this.getCredits[0]._id);
-    // } else {
-    //   console.log("no tiene");
-    // }
-    // console.log("Created");
     this.$q.loading.hide();
   }
 };

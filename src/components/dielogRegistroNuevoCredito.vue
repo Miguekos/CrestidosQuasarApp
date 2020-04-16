@@ -2,7 +2,7 @@
   <div class="full-width">
     <q-card>
       <q-card-section>
-        <div class="text-center">Agregar Credito</div>
+        <div class="text-center text-h6"><u>Agregar credito</u></div>
       </q-card-section>
 
       <q-separator />

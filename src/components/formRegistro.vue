@@ -4,7 +4,6 @@
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-xs">
       <q-input
         dense
-        outlined
         autofocus
         v-model="name"
         label="Nombre *"
@@ -16,7 +15,6 @@
 
       <q-input
         dense
-        outlined
         maxlength="9"
         type="number"
         v-model="dni"
@@ -32,7 +30,6 @@
 
       <q-input
         dense
-        outlined
         maxlength="9"
         type="number"
         counter
@@ -49,6 +46,7 @@
       <div class="row" align="right">
         <div class="col-6 q-pa-xs">
           <q-btn
+            push
             class="full-width"
             outline
             label="Salir"

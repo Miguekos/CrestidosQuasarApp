@@ -5,7 +5,7 @@
         <q-toolbar>
           <q-btn
             v-if="backbutton"
-            @click="IrAtras(getAtras)"
+            @click="IrAtras()"
             flat
             round
             dense
@@ -13,30 +13,12 @@
           />
           <q-btn v-else flat round dense icon="map" />
           <q-toolbar-title @click="home">Prestamos</q-toolbar-title>
-          <!--          <Search />-->
+          <Search v-if="searchactive" />
         </q-toolbar>
       </q-header>
-
-      <!--      <q-footer>-->
-      <!--        <q-toolbar>-->
-      <!--          <q-toolbar-title>Footer</q-toolbar-title>-->
-      <!--        </q-toolbar>-->
-      <!--      </q-footer>-->
       <q-page-container>
         <q-page class="bg-grey-4">
           <router-view></router-view>
-          <!--          <q-page-sticky position="top" expand class="bg-primary text-white">-->
-          <!--            <q-tabs v-model="tab">-->
-          <!--              <q-tab-->
-          <!--                v-for="link in essentialLinks"-->
-          <!--                :key="link.title"-->
-          <!--                @click="URL(link.link)"-->
-          <!--                :name="link.title"-->
-          <!--                :label="link.title"-->
-          <!--                :icon="link.icon"-->
-          <!--              />-->
-          <!--            </q-tabs>-->
-          <!--          </q-page-sticky>-->
         </q-page>
 
         <q-page-scroller position="bottom">
@@ -50,7 +32,7 @@
 import { mapState, mapActions } from "vuex";
 export default {
   computed: {
-    ...mapState("general", ["backbutton"])
+    ...mapState("general", ["backbutton", "searchactive"])
   },
   data() {
     return {
@@ -64,47 +46,7 @@ export default {
       drawerLeft: false,
       drawerRight: false,
       tab: "mails",
-      leftDrawerOpen: false,
-      essentialLinks: [
-        {
-          title: "Clientes",
-          caption: "quasar.dev",
-          link: "/clientes",
-          icon: "group",
-          alert: "red"
-        },
-        {
-          title: "Pagos",
-          caption: "github.com/quasarframework",
-          link: "/pagos",
-          icon: "attach_money",
-          alert: "yellow"
-        },
-        {
-          title: "Control",
-          caption: "chat.quasar.dev",
-          // icon: "chat",
-          link: "https://chat.quasar.dev",
-          icon: "description",
-          alert: "green"
-        },
-        {
-          title: "Config",
-          caption: "forum.quasar.dev",
-          // icon: "record_voice_over",
-          link: "https://forum.quasar.dev",
-          icon: "settings",
-          alert: "blue"
-        }
-        // {
-        //   title: "",
-        //   caption: "forum.quasar.dev",
-        //   icon: "more_vert",
-        //   link: "https://forum.quasar.dev",
-        //   icon: "settings",
-        //   alert: "blue"
-        // }
-      ]
+      leftDrawerOpen: false
     };
   },
   methods: {
@@ -112,15 +54,9 @@ export default {
     home() {
       this.$router.push("/");
     },
-    IrAtras(arg) {
+    IrAtras() {
       this.$router.go(-1);
       console.log("Ir Atras");
-      console.log(arg);
-      // if (arg == "arrow_back") {
-      //   this.$router.go(-1);
-      // } else {
-      //   console.log("No hacer nada");
-      // }
     },
     handleSwipe({ evt, ...info }) {
       this.info = info;
@@ -143,30 +79,6 @@ export default {
         // console.log(arg);
         await this.$router.push(arg);
       }
-    },
-    swipePage(obj) {
-      let delta;
-      switch (obj.direction) {
-        case "right":
-          delta = -1;
-          break;
-        case "left":
-          delta = 1;
-          break;
-        default:
-          return;
-      }
-
-      if (Math.abs(obj.distance.x) < 0.5 * screen.width) {
-        // ignore if not a wide swipe!
-        return;
-      }
-
-      // get desired next page
-      // const goto = routeList.getNext(delta, this.$router.currentRoute);
-      // if (goto) {
-      //   this.$router.push(goto);
-      // }
     }
   },
   components: {
@@ -174,22 +86,12 @@ export default {
     Search: () => import("../components/Search")
   },
   created() {
-    // this.iconAtras(false);
     this.$q.addressbarColor.set("#0056a1");
-    this.stopAtras = false;
     console.log("this.$route.path");
     console.log(this.$route.path);
-    // we register the event like on plugin's doc page
-    // window.addEventListener("deviceready", this.onDeviceReady(), false);
-    // StatusBar.backgroundColorByHexString("#333");
-    // StatusBar.backgroundColorByName("red");
     this.$store.commit("general/setAtras", false);
-    // console.log("Simew se ejecuta created");
   },
-  mounted() {
-    // this.iconAtras("map");
-    console.log("Simew se ejecuta mount");
-  }
+  mounted() {}
 };
 </script>
 <style lang="sass">
