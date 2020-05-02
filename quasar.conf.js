@@ -6,7 +6,7 @@ module.exports = function(ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
-    boot: ["i18n", "axios", "addressbar-color"],
+    boot: ["i18n", "axios", "addressbar-color", "router-auth"],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ["app.sass"],
@@ -43,7 +43,7 @@ module.exports = function(ctx) {
       directives: ["ClosePopup"],
 
       // Quasar plugins
-      plugins: ["Notify", "AddressbarColor", "Dialog", "Loading"]
+      plugins: ["Notify", "AddressbarColor", "Dialog", "Loading", "LocalStorage"]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie

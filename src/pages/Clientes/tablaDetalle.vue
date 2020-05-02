@@ -21,8 +21,8 @@
       <!--      </thead>-->
       <tbody>
         <tr>
-          <td class="text-left">Prestamo:</td>
-          <td class="text-right">{{ info.deuda }} ./S</td>
+          <td class="text-left">Monto para cerrar cuota:</td>
+          <td class="text-right">{{ info.montoAbonadoPuchos }}</td>
         </tr>
         <tr>
           <td class="text-left">Deuda Actual:</td>
@@ -30,7 +30,9 @@
         </tr>
         <tr>
           <td class="text-left">Importe por cuotas:</td>
-          <td class="text-primary text-bold text-right">{{ info.importeCuota }} ./S</td>
+          <td class="text-primary text-bold text-right">
+            {{ info.importeCuota }} ./S
+          </td>
         </tr>
         <tr>
           <td class="text-left">Cuotas Canceladas:</td>

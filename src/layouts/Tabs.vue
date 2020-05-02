@@ -11,7 +11,7 @@
         >
           <q-tab name="clientes" label="Clientes" />
           <q-tab name="pagos" label="Pagos" />
-          <!--          <q-tab name="config" label="Config" />-->
+          <q-tab name="control" label="Control" />
         </q-tabs>
 
         <q-tab-panels v-model="tab" animated swipeable class="bg-grey-4">
@@ -23,10 +23,9 @@
             <Pagos />
           </q-tab-panel>
 
-          <!--          <q-tab-panel class="paneles" name="config">-->
-          <!--            <div class="text-h6">Config</div>-->
-          <!--            Lorem ipsum dolor sit amet consectetur adipisicing elit.-->
-          <!--          </q-tab-panel>-->
+          <q-tab-panel class="paneles" name="control">
+            <Control />
+          </q-tab-panel>
         </q-tab-panels>
       </q-card>
     </div>
@@ -42,7 +41,8 @@ export default {
   components: {
     Clientes: () => import("../pages/Clientes/Index"),
     Search: () => import("../components/Search"),
-    Pagos: () => import("../pages/Pagos/Index")
+    Pagos: () => import("../pages/Pagos/Index"),
+    Control: () => import("../pages/Control/Index")
   }
 };
 </script>

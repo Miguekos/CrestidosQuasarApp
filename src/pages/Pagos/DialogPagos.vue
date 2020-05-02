@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card style="width: 300px">
+    <q-card style="width: 300px;">
       <!-- <q-card-section>
         <div class="text-h6">Inception</div>
       </q-card-section> -->
@@ -47,7 +47,7 @@
       transition-show="scale"
       transition-hide="scale"
     >
-      <q-card class="" style="width: 300px">
+      <q-card class="" style="width: 300px;">
         <q-card-section>
           <div class="text-h6">Monto a cancelar</div>
         </q-card-section>
@@ -79,7 +79,7 @@ export default {
       creditoSeleccionado: "",
       lorem: "Lorem ipsum dolor sit amet",
       inception: false,
-      secondDialog: false
+      secondDialog: false,
     };
   },
   methods: {
@@ -87,7 +87,7 @@ export default {
       this.$q.notify({
         position: "top-right",
         message: `Pago aplicado a ${arg.name}`,
-        color: "secondary"
+        color: "secondary",
       });
     },
     Abono() {
@@ -101,8 +101,8 @@ export default {
       this.creditoSeleccionado = this.listarCreditos;
       this.monto = this.listarCreditos.carbs;
       this.secondDialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="sass" scoped>

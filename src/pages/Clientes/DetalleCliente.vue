@@ -16,10 +16,12 @@
           <q-item-section>
             <q-item-label>{{ getClienteOne.name }}</q-item-label>
             <q-item-label caption>
-              <span class="text-primary text-bold">dni:</span> {{ getClienteOne.dni }}
+              <span class="text-primary text-bold">dni:</span>
+              {{ getClienteOne.dni }}
             </q-item-label>
             <q-item-label caption>
-              <span class="text-primary text-bold">telf:</span> {{ getClienteOne.telefono }}
+              <span class="text-primary text-bold">telf:</span>
+              {{ getClienteOne.telefono }}
             </q-item-label>
             <q-item-label caption>
               <q-rating size="18px" v-model="stars" :max="5" color="primary" />
@@ -51,84 +53,169 @@
           :caption="`Inició: ${formatFecha(link.created_at.$date)}`"
         >
           <q-separator />
-          <q-card class="">
-            <q-card-section>
-              <q-list>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label>
-                      <div class="q-pa-xs">
-                        <div
-                          v-if="getCreditsCrono.cuotasPorPagar > 0"
-                          class="q-mt-xs"
-                        >
-                          <q-item-label class="text-center" caption>
-                            Selecciona cantidad de cuotas
-                          </q-item-label>
-                          <q-slider
-                            name="Cuotas"
-                            v-model="cuotas"
-                            label
-                            :label-value="cuotas + ' Cuotas'"
-                            label-always
-                            :min="1"
-                            :max="getCreditsCrono.cuotasPorPagar"
-                            :step="1"
-                          />
-                        </div>
-                        <!--                        <TablaCronograma :getCreditsCrono="getCreditsCrono" />-->
-                        <!--                      <q-form @submit="onSubmit" class="q-gutter-xs">-->
+          <div class="">
+            <q-card>
+              <q-tabs
+                v-model="listas"
+                class="text-grey"
+                active-color="primary"
+                indicator-color="primary"
+                align="justify"
+              >
+                <q-tab class="text-purple" name="cuotas" label="Cuotas" />
+                <q-tab class="text-orange" name="abonos" label="Monto" />
+              </q-tabs>
 
-                        <q-card
-                          v-if="getCreditsCrono.cuotasPorPagar == 0"
-                          flat
-                          bordered
-                          class="bg-grey-2"
-                        >
-                          <q-card-section>
-                            <div class="text-center text-red text-h5">
-                              Credito Cancelado
+              <q-separator />
+
+              <q-tab-panels v-model="listas" animated swipeable infinite>
+                <q-tab-panel name="cuotas">
+                  <q-card flat class="">
+                    <q-list>
+                      <q-item>
+                        <q-item-section>
+                          <q-item-label>
+                            <div class="q-pa-xs">
+                              <div
+                                v-if="getCreditsCrono.cuotasPorPagar > 0"
+                                class="q-mt-xs"
+                              >
+                                <q-item-label class="text-center" caption>
+                                  Selecciona cantidad de cuotas
+                                </q-item-label>
+                                <q-slider
+                                  name="Cuotas"
+                                  v-model="cuotas"
+                                  label
+                                  :label-value="cuotas + ' Cuotas'"
+                                  label-always
+                                  :min="1"
+                                  :max="getCreditsCrono.cuotasPorPagar"
+                                  :step="1"
+                                />
+                              </div>
+                              <!--                        <TablaCronograma :getCreditsCrono="getCreditsCrono" />-->
+                              <!--                      <q-form @submit="onSubmit" class="q-gutter-xs">-->
+
+                              <q-card
+                                v-if="getCreditsCrono.cuotasPorPagar == 0"
+                                flat
+                                bordered
+                                class="bg-grey-2"
+                              >
+                                <q-card-section>
+                                  <div class="text-center text-red text-h5">
+                                    Credito Cancelado
+                                  </div>
+                                </q-card-section>
+                                <q-separator />
+                              </q-card>
+
+                              <div>
+                                <q-btn
+                                  v-if="getCreditsCrono.cuotasPorPagar > 0"
+                                  :loading="loadingboronabonar"
+                                  size="16px"
+                                  color="grey-4"
+                                  text-color="primary"
+                                  push
+                                  class="full-width"
+                                  @click="onSubmit(link, 1)"
+                                  label="Procesar"
+                                />
+                              </div>
+                              <!--                      </q-form>-->
                             </div>
-                          </q-card-section>
-                          <q-separator />
-                        </q-card>
+                          </q-item-label>
+                          <q-item-label v-if="getCreditsCrono.length == 0">
+                            <!--                    <TablaDetalle :info="getCreditsCrono" />-->
+                          </q-item-label>
+                          <q-item-label
+                            @click="fechasCronograma(link._id)"
+                            v-else
+                          >
+                            <TablaDetalle :info="getCreditsCrono" />
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
+                      <q-separator />
+                    </q-list>
+                  </q-card>
+                </q-tab-panel>
+                <q-tab-panel name="abonos">
+                  <q-card flat class="">
+                    <q-list>
+                      <q-item>
+                        <q-item-section>
+                          <q-item-label>
+                            <div class="q-pa-xs">
+                              <div
+                                v-if="getCreditsCrono.cuotasPorPagar > 0"
+                                class="q-mt-xs"
+                              >
+                                <!--                                  <q-item-label class="text-center" caption>-->
+                                <!--                                    Coloca el Monto-->
+                                <!--                                  </q-item-label>-->
+                                <q-input
+                                  class="q-pb-md"
+                                  v-model="cuotasMonto"
+                                  dense
+                                  square
+                                  filled
+                                  label="Monto"
+                                />
+                              </div>
+                              <!--                        <TablaCronograma :getCreditsCrono="getCreditsCrono" />-->
+                              <!--                      <q-form @submit="onSubmit" class="q-gutter-xs">-->
 
-                        <div>
-                          <q-btn
-                            v-if="getCreditsCrono.cuotasPorPagar > 0"
-                            :loading="loadingboronabonar"
-                            size="16px"
-                            color="grey-4"
-                            text-color="primary"
-                            push
-                            class="full-width"
-                            @click="onSubmit(link)"
-                            label="Procesar"
-                          />
-                        </div>
-                        <!--                      </q-form>-->
-                      </div>
-                    </q-item-label>
-                    <q-item-label v-if="getCreditsCrono.length == 0">
-                      <!--                    <TablaDetalle :info="getCreditsCrono" />-->
-                    </q-item-label>
-                    <q-item-label @click="fechasCronograma(link._id)" v-else>
-                      <TablaDetalle :info="getCreditsCrono" />
-                    </q-item-label>
-                    <!--                    <q-item-label caption-->
-                    <!--                      >Ultimo pago-->
-                    <!--                      <span style="color: #0d47a1">{{ link.fecha }}</span>-->
-                    <!--                      por-->
-                    <!--                      <b style="color: #b71c1c"-->
-                    <!--                        >{{ link.pago }}./S</b-->
-                    <!--                      ></q-item-label-->
-                    <!--                    >-->
-                  </q-item-section>
-                </q-item>
-                <q-separator />
-              </q-list>
-            </q-card-section>
-          </q-card>
+                              <q-card
+                                v-if="getCreditsCrono.cuotasPorPagar == 0.0"
+                                flat
+                                bordered
+                                class="bg-grey-2"
+                              >
+                                <q-card-section>
+                                  <div class="text-center text-red text-h5">
+                                    Credito Cancelado
+                                  </div>
+                                </q-card-section>
+                                <q-separator />
+                              </q-card>
+
+                              <div>
+                                <q-btn
+                                  v-if="getCreditsCrono.cuotasPorPagar > 0.0"
+                                  :loading="loadingboronabonar"
+                                  size="16px"
+                                  color="grey-4"
+                                  text-color="primary"
+                                  push
+                                  class="full-width"
+                                  @click="onSubmit(link, 2)"
+                                  label="Procesar"
+                                />
+                              </div>
+                              <!--                      </q-form>-->
+                            </div>
+                          </q-item-label>
+                          <q-item-label v-if="getCreditsCrono.length == 0">
+                            <!--                    <TablaDetalle :info="getCreditsCrono" />-->
+                          </q-item-label>
+                          <q-item-label
+                            @click="fechasCronograma(link._id)"
+                            v-else
+                          >
+                            <TablaDetalle :info="getCreditsCrono" />
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
+                      <q-separator />
+                    </q-list>
+                  </q-card>
+                </q-tab-panel>
+              </q-tab-panels>
+            </q-card>
+          </div>
         </q-expansion-item>
         <!--        </div>-->
       </q-card>
@@ -153,6 +240,7 @@ export default {
   data() {
     return {
       stars: 3,
+      listas: "cuotas",
       loadingboronabonar: false,
       pagination: {
         sortBy: "fechaIngreso",
@@ -166,6 +254,7 @@ export default {
       dialogRegistroNuevoCredito: false,
       text: "",
       cuotas: 1,
+      cuotasMonto: null,
       submitResult: [],
       loading: false,
       expandedActivos: false,
@@ -244,37 +333,68 @@ export default {
       // console.log(formattedString);
       return formattedString;
     },
-    async onSubmit(arg) {
+    async onSubmit(arg, tipo) {
       this.loadingboronabonar = true;
       console.log("Realizando Abono");
-      // console.log(arg);
-      const body = {
-        ...arg,
-        cliente: this.getClienteOne.name,
-        dni: this.getClienteOne.dni,
-        cuotasPagadas: this.cuotas
-      };
-      console.log(body);
-      this.cuotas = 1;
-      await this.abonarCuotas(body);
-      // console.log("asdadad");
-      // console.log(arg._id.$oid)
-      const respp = await this.callCreditCrono(arg._id.$oid);
-      console.log("respiiesa", respp);
-      this.loadingboronabonar = false;
-      // console.log("asdadad");
-      // const formData = new FormData(evt.target);
-      // const submitResult = [];
-      // for (const [name, value] of formData.entries()) {
-      //   console.log(name);
-      //   console.log(value);
-      // submitResult.push({
-      //   name,
-      //   value
-      // });
-      // }
-
-      // this.submitResult = submitResult;
+      console.log("getCreditsCrono", this.getCreditsCrono.deudaActual);
+      const deudaActual = this.getCreditsCrono.deudaActual;
+      const importeCuota = this.getCreditsCrono.importeCuota;
+      let body = {};
+      if (tipo == 1) {
+        const total = this.cuotas * importeCuota;
+        if (total <= deudaActual) {
+          body = {
+            ...arg,
+            cliente: this.getClienteOne.name,
+            dni: this.getClienteOne.dni,
+            cuotasPagadas: this.cuotas,
+            tipoPago: 1,
+            cuotasMonto: 0
+          };
+          this.AbonarCuenta(body, arg._id.$oid, 1);
+        } else {
+          this.notificacion(1);
+          this.AbonarCuenta(null, null, 2);
+        }
+      } else if (tipo == 2) {
+        const total = this.cuotasMonto;
+        if (total <= deudaActual) {
+          body = {
+            ...arg,
+            cliente: this.getClienteOne.name,
+            dni: this.getClienteOne.dni,
+            cuotasPagadas: 0,
+            tipoPago: 2,
+            cuotasMonto: this.cuotasMonto
+          };
+          this.AbonarCuenta(body, arg._id.$oid, 1);
+        } else {
+          this.notificacion(1);
+          this.AbonarCuenta(null, null, 2);
+        }
+      }
+    },
+    async AbonarCuenta(arg, id, tipo) {
+      if (tipo == 1) {
+        console.log(arg);
+        this.cuotas = 1;
+        this.cuotasMonto = null;
+        await this.abonarCuotas(arg);
+        const respp = await this.callCreditCrono(id);
+        this.loadingboronabonar = false;
+      } else if (tipo == 2) {
+        console.log(arg);
+        this.cuotas = 1;
+        this.cuotasMonto = null;
+        this.loadingboronabonar = false;
+      }
+    },
+    notificacion(arg) {
+      this.$q.notify({
+        message: "No se puede procesar un pago superior a la deuda",
+        color: "red",
+        position: "top-right"
+      });
     },
     async getDetalleCrono(arg) {
       this.$q.loading.show();
@@ -302,7 +422,6 @@ export default {
       }, 1000);
     }
   },
-
   beforeDestroy() {
     clearTimeout(this.timer);
   },

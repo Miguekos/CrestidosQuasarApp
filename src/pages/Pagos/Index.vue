@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-page padding>
     <q-table
       v-if="getAbonos.length != 0"
       grid-header
@@ -103,7 +103,7 @@
     <!--        <q-toolbar-title>Title</q-toolbar-title>-->
     <!--      </q-toolbar>-->
     <!--    </q-page-sticky>-->
-  </div>
+  </q-page>
 </template>
 
 <script>

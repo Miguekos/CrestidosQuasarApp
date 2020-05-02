@@ -14,6 +14,12 @@
           <q-btn v-else flat round dense icon="map" />
           <q-toolbar-title @click="home">Prestamos</q-toolbar-title>
           <Search v-if="searchactive" />
+          <q-icon
+            class="q-ml-sm"
+            size="20px"
+            @click="Logout()"
+            name="more_vert"
+          ></q-icon>
         </q-toolbar>
       </q-header>
       <q-page-container>
@@ -29,6 +35,7 @@
   </div>
 </template>
 <script>
+import { LocalStorage } from "quasar";
 import { mapState, mapActions } from "vuex";
 export default {
   computed: {
@@ -51,6 +58,21 @@ export default {
   },
   methods: {
     ...mapActions("general", ["iconAtras"]),
+    Logout() {
+      this.$q.loading.show();
+      LocalStorage.clear();
+      // setTimeout(() => {
+      this.$router.push("/auth");
+      this.$q.notify({
+        // progress: true,
+        message: "Deslogueo Correcto",
+        icon: "mail",
+        color: "white",
+        textColor: "primary"
+      });
+      this.$q.loading.hide();
+      // }, 2000);
+    },
     home() {
       this.$router.push("/");
     },
