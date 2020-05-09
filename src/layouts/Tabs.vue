@@ -11,7 +11,7 @@
         >
           <q-tab name="clientes" label="Clientes" />
           <q-tab name="pagos" label="Pagos" />
-          <q-tab name="control" label="Control" />
+          <!--          <q-tab name="control" label="Control" />-->
         </q-tabs>
 
         <q-tab-panels v-model="tab" animated swipeable class="bg-grey-4">
@@ -23,9 +23,9 @@
             <Pagos />
           </q-tab-panel>
 
-          <q-tab-panel class="paneles" name="control">
-            <Control />
-          </q-tab-panel>
+          <!--          <q-tab-panel class="paneles" name="control">-->
+          <!--            <Control />-->
+          <!--          </q-tab-panel>-->
         </q-tab-panels>
       </q-card>
     </div>

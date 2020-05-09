@@ -357,8 +357,9 @@ export default {
           this.AbonarCuenta(null, null, 2);
         }
       } else if (tipo == 2) {
+        console.log("totaltotaltotal", this.cuotasMonto);
         const total = this.cuotasMonto;
-        if (total <= deudaActual) {
+        if (total <= deudaActual && total != null && total != "") {
           body = {
             ...arg,
             cliente: this.getClienteOne.name,

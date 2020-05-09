@@ -1,47 +1,51 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <div class="row q-mb-md">
-      <q-banner class="bg-grey-3 col">
-        <template v-slot:avatar>
-          <q-icon name="account_circle" color="primary" />
-        </template>
-        <!--        asd-->
-        {{ tab | titleCase }}
-      </q-banner>
-    </div>
-    <div class="row q-mb-md">
-      <q-input
-        v-model="formData.email"
-        :rules="[
-          val => isValidEmailAddress(val) || 'Por favor introduce un email correcto.'
-        ]"
-        ref="email"
-        lazy-rules
-        outlined
-        class="col"
-        label="Email"
-        stack-label
-      />
-    </div>
-    <div class="row q-mb-md">
-      <q-input
-        v-model="formData.password"
-        :rules="[
-          val => val.length >= 6 || 'Por favor passeord minimo 6 caracteres.'
-        ]"
-        ref="password"
-        lazy-rules
-        type="password"
-        outlined
-        class="col"
-        label="Password"
-        stack-label
-      />
-    </div>
-    <div class="">
-      <q-btn class="full-width" color="primary" :label="tab" type="submit" />
-    </div>
-  </form>
+  <div>
+    <form @submit.prevent="submitForm">
+      <div class="row q-mb-md">
+        <q-banner class="bg-grey-3 col">
+          <template v-slot:avatar>
+            <q-icon name="account_circle" color="primary" />
+          </template>
+          <!--        asd-->
+          {{ tab | titleCase }}
+        </q-banner>
+      </div>
+      <div class="row q-mb-md">
+        <q-input
+          v-model="formData.email"
+          :rules="[
+            val =>
+              isValidEmailAddress(val) ||
+              'Por favor introduce un email correcto.'
+          ]"
+          ref="email"
+          lazy-rules
+          outlined
+          class="col"
+          label="Email"
+          stack-label
+        />
+      </div>
+      <div class="row q-mb-md">
+        <q-input
+          v-model="formData.password"
+          :rules="[
+            val => val.length >= 6 || 'Por favor passeord minimo 6 caracteres.'
+          ]"
+          ref="password"
+          lazy-rules
+          type="password"
+          outlined
+          class="col"
+          label="Password"
+          stack-label
+        />
+      </div>
+      <div class="">
+        <q-btn class="full-width" color="primary" :label="tab" type="submit" />
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -52,8 +56,8 @@ export default {
   data() {
     return {
       formData: {
-        email: "",
-        password: ""
+        email: "admin@admin.com.pe",
+        password: "secret"
       }
     };
   },

@@ -1,49 +1,56 @@
 <template>
-  <div class="q-pa-md">
-    <div class="q-gutter-y-md" style="max-width: 600px; margin: 0 auto;">
-      <q-card>
-        <q-tabs
-          v-model="tab"
-          class="bg-primary text-white"
-          align="justify"
-          narrow-indicator
-        >
-          <q-tab name="Login" label="Login" />
-          <q-tab name="Registrar" label="Registrar" />
-        </q-tabs>
+  <div class="loginform flex flex-center">
+    <div class="row justify-center">
+      <!-- <div class="col-8 text-center">
+        <p class="text-white caption">Inicio de Sesion </p>
+      </div> -->
 
-        <q-separator />
-
-        <q-tab-panels v-model="tab" animated class="bg-primary-1 text-center">
-          <q-tab-panel name="Login">
-            <login-register :tab="tab" />
-          </q-tab-panel>
-
-          <q-tab-panel name="Registrar">
-            <login-register :tab="tab" />
-          </q-tab-panel>
-        </q-tab-panels>
+      <q-card
+        class="my-card text-white"
+        style="width: 300px; height: 280px; background: radial-gradient(circle, #26a69a 0%, #014a88 100%)"
+      >
+        Aqui va el ogin
       </q-card>
     </div>
   </div>
 </template>
 
 <script>
+// import { LocalStorage } from "quasar";
+import { mapActions } from "vuex";
+console.log(process.env.API);
+// import { openURL } from 'quasar'
 export default {
+  // preFetch({ store }) {
+  //   console.log("stored autth");
+  //   console.log(store.state.auth.auth);
+  //   if (!store.state.auth) {
+  //     console.log(store.state.auth);
+  //     // redirect('/')
+  //   }
+  // },
   data() {
     return {
-      tab: "Login"
+      loading: false,
+      form: {
+        email: "user@user.com",
+        password: "secret"
+      }
     };
   },
-  components: {
-    "login-register": require("../../components/Auth/LoginRegister.vue").default
+  methods: {
+    login() {}
   }
 };
 </script>
 
-<style>
-.auth-tabs {
-  max-width: 500px;
-  margin: 0 auto;
+<style scoped>
+.loginform {
+  /* background-color: #365552; */
+  background-image: url("/statics/fondo.jpg");
+}
+
+.titulo {
+  font-size: 22px;
 }
 </style>

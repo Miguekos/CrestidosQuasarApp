@@ -16,9 +16,9 @@
           <Search v-if="searchactive" />
           <q-icon
             class="q-ml-sm"
-            size="20px"
+            size="23px"
             @click="Logout()"
-            name="more_vert"
+            name="exit_to_app"
           ></q-icon>
         </q-toolbar>
       </q-header>
