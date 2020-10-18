@@ -1,8 +1,8 @@
 {
   "name": "prestamos",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "description": "Control y Admin de Pagos",
+  "productName": "Prestamos",
   "cordovaId": "org.quasar.prestamos",
   "capacitorId": "",
   "author": "Miguel Rodriguez <miguekos1233@gmail.com>",

@@ -6,8 +6,7 @@
           <template v-slot:avatar>
             <q-icon name="account_circle" color="primary" />
           </template>
-          <!--        asd-->
-          {{ tab | titleCase }}
+          <span class="text-h5">{{ tab | titleCase }}</span>
         </q-banner>
       </div>
       <div class="row q-mb-md">
