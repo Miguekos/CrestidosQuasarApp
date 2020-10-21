@@ -18,7 +18,6 @@
       <!--      <q-separator color="primary" inset />-->
 
       <q-input
-        :disable="true"
         dense
         counter
         type="number"
